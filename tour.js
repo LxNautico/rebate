@@ -3,7 +3,7 @@ const tourSteps=[
  {target:'.competition-choice',setup:true,title:'Partida ou torneio',text:'Partida avulsa permite escolher o rival. No torneio, enfrente três rivais sorteados e conquiste um troféu.'},
  {target:'#court-theme',setup:true,title:'Sua quadra',text:'Verde está disponível desde o início. As outras cores são recompensas por desafios; as cores não mudam as regras.'},
  {target:'.setup-options',setup:true,title:'Regras e dificuldade',text:'Escolha partida rápida ou três sets. Fácil, médio e difícil controlam a reação e precisão do adversário. Entrar na mesa inicia a partida depois da escolha do personagem.'},
- {target:'.move-controls',title:'Fique na frente da bola',text:'Use ← → ou A/D. No celular, use os botões, a barra de posição ou arraste a parte inferior da mesa. Os controles só atuam durante uma partida.'},
+ {target:'#gameCanvas',title:'Fique na frente da bola',text:'Use ← → ou A/D. No celular, toque na sua metade da quadra para posicionar o personagem; não é necessário arrastar. Os controles só atuam durante uma partida.'},
  {target:'.touch-controls nav',title:'Escolha onde a bola chega',text:'Os números 1–9 determinam o destino no lado adversário. Mira reta limpa essa escolha, mas não rebate a bola.'},
  {target:'.shot-controls',title:'Rebata e dê efeito',text:'Pressione ↑ quando aparecer ↑ REBATA. Segure uma seta lateral junto de ↑ para dar curva. No celular, use Golpear, Efeito ou deslize para cima na área de gesto.'},
  {target:'.ranking-panel',title:'Seu progresso',text:'Ranking, desafios e troféus ficam neste navegador. Torneios podem ser retomados, reiniciando a rodada com placar zerado. Agora você pode abrir as escolhas e jogar!'}

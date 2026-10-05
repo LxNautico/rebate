@@ -10,7 +10,7 @@ Abra `index.html` no navegador, escolha personagem, uniforme, quadra, dificuldad
 - Segure uma seta lateral junto de ↑ para dar curva.
 - “Mira reta” limpa o destino; não executa o golpe.
 - P ou Escape: pausar; Espaço: iniciar ou continuar.
-- No celular: botões, barra e gesto para cima ou diagonal. Deslize lateral excessivo pode mandar a bola para fora.
+- No celular: toque na sua metade da quadra para mover; botões de golpe e gesto para cima ou diagonal. Deslize lateral excessivo pode mandar a bola para fora.
 
 Partida rápida até cinco pontos ou melhor de três sets até onze, com dois de vantagem. Saques alternam a cada dois pontos; em 10 × 10, a cada ponto. O saque quica dos dois lados.
 

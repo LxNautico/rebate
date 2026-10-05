@@ -38,6 +38,24 @@ main{max-width:1300px;width:calc(100% - 24px)}.play-layout{grid-template-columns
 
 .character-style{display:block;font-size:12px;line-height:1.5;color:#ffdb84;min-height:54px;margin:8px 0;text-transform:none}
 
+/* Mobile: prioritize the court and keep only aim and shot controls. */
+@media(max-width:720px) and (orientation:portrait){
+ .play-layout{grid-template-columns:minmax(0,1fr)}
+ .guidance{grid-column:1;grid-row:1;padding:7px 10px;display:flex;align-items:center;gap:10px}
+ .guidance strong{flex:0 0 auto;font-size:12px}
+ .guidance p{margin:0;font-size:11px;line-height:1.4}
+ .arena{grid-column:1;grid-row:2;width:100%;max-width:none}
+ .touch-controls{grid-column:1;grid-row:3;grid-template-columns:1fr 1fr;gap:6px}
+ .touch-controls>p,.touch-controls #straight{grid-row:1}
+ .touch-controls nav{grid-row:2}
+ #gesture,.shot-controls{grid-row:3}
+ #feedback{grid-column:1;grid-row:4}
+ .beginner-help{grid-column:1;grid-row:5}
+ .ranking-panel{grid-column:1;grid-row:6}
+ .point-notice-slot{min-height:0;margin-bottom:6px}
+ .scoreboard #explore-play{min-height:36px;padding:6px}
+}
+
 #explore-play{background:#f5c86a;color:#172d32;border:0;font-weight:800;min-height:44px;min-width:110px;font-size:14px}
 @media(max-width:720px) and (orientation:portrait){.scoreboard #explore-play{grid-column:1 / -1;grid-row:4;width:100%}}
 

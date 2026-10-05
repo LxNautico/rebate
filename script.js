@@ -48,7 +48,7 @@ const laneX=lane=>(lane+.5)/9;
 function project(x,depth,height=0){if(isTopSide())depth=1-depth;const scale=.48+.52*depth;return {x:400+(x-.5)*(330+370*depth),y:170+560*depth-height*scale,scale};}
 function polygon(points,fill,stroke){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=3;ctx.stroke();}}
 function line(a,b,color,width=2){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke();}
-function chooseLane(position){if(state!=='playing')return;player=Math.max(0,Math.min(8,position));document.getElementById('position').value=player;}
+function chooseLane(position){if(state!=='playing')return;player=Math.max(0,Math.min(8,position));}
 function selectTarget(value){gestureAim=null;if(state!=='playing')return;target=value;ui.target.textContent=target===null?'Reto':target+1;document.querySelectorAll('[data-target]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.target)===target)));}
 function start(){if(!document.getElementById('guided-tour').hidden)closeTour();pointReaction=null;resetCharacterMotion();resetOpponentStyle();ui.overlay.dataset.result='';document.getElementById('pause-actions').hidden=true;if(!characters.some(c=>c.id===document.getElementById('player-character').value)){openCharacterSetup();return;}prepareTournament();applyTableSide();document.getElementById('leave-tournament').hidden=true;document.getElementById('character-setup').hidden=true;document.getElementById('return-match').hidden=true;resetMatchStats();document.getElementById('match-results').hidden=true;document.getElementById('change-character').hidden=true;gameAudio.unlock();playerUniform=selectedUniform(document.getElementById('player-uniform').value);opponentUniform=selectedUniform(document.getElementById('opponent-uniform').value,'red');playerCharacter=selectedCharacter(document.getElementById('player-character').value);const rival=document.getElementById('opponent-character').value;const candidates=characters.filter(c=>c.id!==playerCharacter);opponentCharacter=rival==='random'?candidates[Math.floor(Math.random()*candidates.length)].id:selectedCharacter(rival);lockCharacters(true);document.getElementById('character-note').textContent='Você: '+characters.find(c=>c.id===playerCharacter).name+' · Adversário: '+characters.find(c=>c.id===opponentCharacter).name+' · '+characterStyles[opponentCharacter].label;document.querySelector('.character-picker').open=true;matchMode=document.getElementById('match-mode').value;document.getElementById('match-mode').disabled=true;playerSets=opponentSets=0;setNumber=1;setEnding=false;gestureAim=null;bounceFlash=0;bounceSpot=null;playerAnimation=opponentAnimation=0;playerPose=opponentPose=0;difficulty=document.getElementById('difficulty').value;loadBest();document.getElementById('difficulty').disabled=true;pointDelay=0;matchEnding=false;document.getElementById('point-banner').hidden=true;score=0;player=4;target=null;swing=0;held.clear();state='playing';ui.score.textContent=0;ui.overlay.hidden=true;ui.pause.disabled=false;ui.pause.textContent='Pausar';chooseLane(4);selectTarget(null);opponent=4;playerPoints=0;opponentPoints=0;rallies=0;updatePoints();prepareServe();resetChallenges();ui.status.textContent='Partida iniciada.';}
 function updatePoints(){document.getElementById('active-mode').textContent=(matchMode==='sets'?'3 SETS':'RÁPIDA')+' · '+({easy:'FÁCIL',medium:'MÉDIO',hard:'DIFÍCIL'}[difficulty]||'FÁCIL');document.getElementById('points').textContent=playerPoints+' × '+opponentPoints;document.getElementById('sets').textContent=matchMode==='sets'?playerSets+' × '+opponentSets:'—';document.getElementById('set-label').textContent=matchMode==='sets'?'SET '+setNumber:'RÁPIDA';}
@@ -65,10 +65,8 @@ document.getElementById('match-mode').addEventListener('change',e=>{matchMode=e.
 document.getElementById('difficulty').addEventListener('change',e=>{difficulty=e.target.value;loadBest();renderRanking();});
 document.querySelectorAll('[data-target]').forEach(b=>b.addEventListener('click',()=>selectTarget(Number(b.dataset.target))));
 document.getElementById('straight').addEventListener('click',()=>selectTarget(null));
-document.getElementById('position').addEventListener('input',e=>chooseLane(Number(e.target.value)));
 document.getElementById('hit').addEventListener('click',()=>strike());
 document.querySelectorAll('[data-effect]').forEach(b=>b.addEventListener('click',()=>strike(Number(b.dataset.effect))));
-document.querySelectorAll('[data-move]').forEach(b=>{const release=()=>held.delete(b.dataset.move);b.addEventListener('pointerdown',e=>{if(state!=='playing')return;held.add(b.dataset.move);b.setPointerCapture(e.pointerId);});b.addEventListener('pointerup',release);b.addEventListener('pointercancel',release);});
 document.addEventListener('keydown',e=>{
  const k=e.key.toLowerCase();
  if(!document.getElementById('guided-tour').hidden||!document.getElementById('character-setup').hidden)return;
@@ -93,13 +91,21 @@ pad.addEventListener('pointerup',e=>{
  selectTarget(Math.max(0,Math.min(8,Math.round(player+dx*9))));gestureAim=player+dx*9;strike(Math.abs(dx)<.08?0:Math.sign(dx));
 });
 pad.addEventListener('pointercancel',()=>{gesture=null;});
-// Drag the near edge of the table to position the paddle directly on touch screens.
+// A tap in the player's half positions the paddle; dragging never moves it.
 let paddlePointer=null;
-function touchPosition(e){const rect=canvas.getBoundingClientRect();const x=(e.clientX-rect.left)/rect.width*800;chooseLane(((x-400)/(isTopSide()?330:700)+.5)*9-.5);}
-canvas.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'||state!=='playing')return;const rect=canvas.getBoundingClientRect();const touchDepth=(e.clientY-rect.top)/rect.height;if(isTopSide()?touchDepth>.35:touchDepth<.65)return;paddlePointer=e.pointerId;canvas.setPointerCapture(e.pointerId);touchPosition(e);});
-canvas.addEventListener('pointermove',e=>{if(e.pointerId===paddlePointer)touchPosition(e);});
-canvas.addEventListener('pointerup',()=>{paddlePointer=null;});
-canvas.addEventListener('pointercancel',()=>{paddlePointer=null;});
+function positionFromCourtTap(clientX,clientY,rect,topSide){
+ const x=(clientX-rect.left)/rect.width*800;
+ const screenDepth=Math.max(0,Math.min(1,((clientY-rect.top)/rect.height*900-170)/560));
+ const width=330+370*screenDepth;
+ return Math.max(0,Math.min(8,((x-400)/width+.5)*9-.5));
+}
+canvas.addEventListener('pointerdown',e=>{
+ if(e.pointerType==='mouse'||state!=='playing'||pointDelay>0)return;
+ const rect=canvas.getBoundingClientRect(),y=(e.clientY-rect.top)/rect.height;
+ if(isTopSide()?y>.5:y<.5)return;
+ chooseLane(positionFromCourtTap(e.clientX,e.clientY,rect,isTopSide()));
+});
+
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='playing')pause();});
 // Each shot crosses the net, bounces at 78% of its travel, then rises toward the receiver.
 function shotProgress(){return Math.max(0,Math.min(1,ball.direction===1?ball.depth:1-ball.depth));}
@@ -176,7 +182,7 @@ function updateGuidance(){if(isTopSide())ui.feedback.textContent=ui.feedback.tex
  else if(serving){title='Saque do oponente';text='Prepare-se para acompanhar a bola. Use ← → para mover sua raquete.';}
  else if(ball.direction<0){title='Sua bola vai ao oponente';text='Prepare sua posição para a próxima recepção. Você já pode escolher o destino da próxima devolução.';}
  else if(ball.depth>=.8){title='Sua vez: rebata agora ↑';text='Fique na frente da bola e pressione ↑. Para curva, segure ← ou → junto com ↑.';}
- else {title='Prepare a recepção';text='Mova com ← → até a faixa iluminada. Escolha 1–9 para mirar; espere a bola chegar para pressionar ↑.';}
+ else {title='Prepare a recepção';text='No celular, toque na quadra; no teclado, use ← →. Fique na faixa iluminada. Escolha 1–9 para mirar; espere a bola chegar para pressionar ↑.';}
  const heading=document.getElementById('guide-title'), body=document.getElementById('guide-text');
  if(isTopSide()){title=title.replaceAll('↑','↓');text=text.replaceAll('↑','↓');}
  if(heading.textContent!==title)heading.textContent=title;

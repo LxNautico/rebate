@@ -11,7 +11,7 @@ Abra o endereço publicado no navegador do celular. A hospedagem e o endereço p
 ## Conferir no aparelho
 
 - Escolha personagens, regras e dificuldade; feche a seleção e reabra pelo botão amarelo Jogar.
-- Confira barra de posição, movimento por botões, destinos, golpe e gesto diagonal.
+- Confira toque para posição na quadra, destinos, golpe e gesto diagonal.
 - Teste som após tocar na tela, pausa ao trocar de aplicativo, orientação vertical e horizontal.
 - Confira comemorações, troféus e retomada do torneio após recarregar.
 
@@ -19,7 +19,7 @@ Progresso fica no navegador e no endereço utilizado. Dados do jogo aberto como 
 
 ## Escolher o lado
 
-Na preparação, escolha Embaixo (↑) ou Em cima (↓). No lado superior, deslize para baixo para golpear e arraste a região superior da mesa para se posicionar. Esquerda e direita continuam seguindo os lados da tela; destinos 1–9 também seguem da esquerda para direita. O torneio preserva o lado escolhido. Regras e pontuação não mudam.
+Na preparação, escolha Embaixo (↑) ou Em cima (↓). No lado superior, deslize para baixo para golpear e toque na metade superior da mesa para se posicionar. Esquerda e direita continuam seguindo os lados da tela; destinos 1–9 também seguem da esquerda para direita. O torneio preserva o lado escolhido. Regras e pontuação não mudam.
 
 ## GitHub Pages
 
