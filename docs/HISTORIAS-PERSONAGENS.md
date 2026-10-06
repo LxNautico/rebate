@@ -100,3 +100,5 @@ A página abre diretamente na apresentação. Jogar abre a seleção; fechar com
 Os capítulos são exibidos em ordem após vitórias de sets e partidas, até os três capítulos por personagem. Continuar e Pular registram a passagem como vista; a galeria permite reler. O jogo aguarda a leitura e prepara o próximo saque somente depois de fechar o card. O final narrado aparece junto do troféu, ao conquistar torneio ou Copa. A galeria também oferece acesso aos finais, inclusive antes de conquistá-los. Não há preferência permanente para pular toda a história nesta versão.
 
 Teste: `node tests/stories.cjs`.
+
+A apresentação também alterna as quatro quadras e as cinco cores de uniforme, com cores diferentes para os dois atletas. Exibe inclusive quadras ainda bloqueadas como prévia; isso não as desbloqueia nem modifica as escolhas da partida.
