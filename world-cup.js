@@ -72,8 +72,8 @@ function renderSavedWorldCup(){const box=document.getElementById('saved-world-cu
 function prepareWorldCup(){
  if(document.getElementById('competition').value!=='worldcup'){worldCup=null;renderWorldCup();return;}
  if(worldCup&&worldCup.status!=='active')worldCup=null;
- if(!worldCup)worldCup=createWorldCup({country:document.getElementById('cup-country').value,character:document.getElementById('player-character').value,uniform:document.getElementById('player-uniform').value,opponentUniform:document.getElementById('opponent-uniform').value,mode:document.getElementById('match-mode').value,difficulty:document.getElementById('difficulty').value,side:document.getElementById('table-side').value},characters.map(c=>c.id));
- for(const [id,value] of [['player-character',worldCup.character],['player-uniform',worldCup.uniform],['opponent-uniform',worldCup.opponentUniform||'red'],['match-mode',worldCup.mode],['difficulty',worldCup.difficulty],['table-side',worldCup.side||'bottom'],['cup-country',worldCup.country],['opponent-character',worldCup.roster[cupOpponent(worldCup)] ]])document.getElementById(id).value=value;
+ if(!worldCup)worldCup=createWorldCup({playStyle:selectedPlayStyle(),country:document.getElementById('cup-country').value,character:document.getElementById('player-character').value,uniform:document.getElementById('player-uniform').value,opponentUniform:document.getElementById('opponent-uniform').value,mode:document.getElementById('match-mode').value,difficulty:document.getElementById('difficulty').value,side:document.getElementById('table-side').value},characters.map(c=>c.id));
+ for(const [id,value] of [['play-style',worldCup.playStyle||'classic'],['player-character',worldCup.character],['player-uniform',worldCup.uniform],['opponent-uniform',worldCup.opponentUniform||'red'],['match-mode',worldCup.mode],['difficulty',worldCup.difficulty],['table-side',worldCup.side||'bottom'],['cup-country',worldCup.country],['opponent-character',worldCup.roster[cupOpponent(worldCup)] ]])document.getElementById(id).value=value;
  saveWorldCup();renderWorldCup();
 }
 function renderWorldCup(){
@@ -111,7 +111,7 @@ function finishWorldCupMatch(){
  const stage=cupStage(worldCup),outcome=advanceWorldCup(worldCup,matchMode==='sets'?playerSets:playerPoints,matchMode==='sets'?opponentSets:opponentPoints);
  document.getElementById('change-character').hidden=true;document.getElementById('leave-cup').hidden=false;
  if(outcome==='champion'){
-  tournamentTrophies.push({type:'worldcup',country:worldCup.country,character:worldCup.character,difficulty:worldCup.difficulty,mode:worldCup.mode,date:new Date().toISOString()});tournamentTrophies=tournamentTrophies.slice(-50);try{localStorage.setItem('ping-pong-trophies-v1',JSON.stringify(tournamentTrophies));}catch{}
+  tournamentTrophies.push({type:'worldcup',playStyle:worldCup.playStyle||'classic',country:worldCup.country,character:worldCup.character,difficulty:worldCup.difficulty,mode:worldCup.mode,date:new Date().toISOString()});tournamentTrophies=tournamentTrophies.slice(-50);try{localStorage.setItem('ping-pong-trophies-v1',JSON.stringify(tournamentTrophies));}catch{}
   showChampionCharacter();ui.overlay.dataset.result='champion';ui.title.textContent='🏆 Campeão mundial!';ui.message.textContent+= ' '+cupLabel(worldCup.country)+' conquistou a Copa Mundial do Rebate!';ui.start.textContent='Nova Copa';renderTournament();
  }else if(outcome==='eliminated'){ui.title.textContent='Copa encerrada';ui.message.textContent+=' '+cupLabel(worldCup.country)+' foi eliminado em '+stage+'.';ui.start.textContent='Nova Copa';}
  else{ui.title.textContent=outcome==='qualified'?'Classificado para as quartas!':'Copa Mundial · próxima partida';ui.message.textContent+=' Próximo: '+cupStage(worldCup)+' contra '+cupLabel(cupOpponent(worldCup))+' — '+characterStyles[worldCup.roster[cupOpponent(worldCup)]].label+'.';ui.start.textContent='Jogar próxima partida';}

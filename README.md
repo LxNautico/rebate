@@ -65,3 +65,7 @@ Execute `node tests/balance.cjs` na pasta do projeto. Confira sintaxe com `node 
 ## Copa Mundial
 
 Escolha Copa Mundial e seu país para disputar grupos, quartas, semifinal e final contra 16 países representados pelos personagens existentes. Partidas dos demais países são simuladas. Progresso salvo e troféu mundial na galeria. Consulte `docs/COPA-MUNDIAL.md` para regras e testes.
+
+### Modalidade Arena
+
+Escolha Clássico ou Arena na preparação. Na Arena, cinco devoluções carregam o golpe especial de velocidade; ative com Espaço ou pelo botão no celular e rebata. Rankings são separados. Veja [as regras da Arena](docs/ARENA.md).

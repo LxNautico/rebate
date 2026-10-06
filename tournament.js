@@ -24,7 +24,7 @@ function renderTrophyGallery(){
  for(const trophy of [...tournamentTrophies].reverse()){
   const item=document.createElement('li');const name=characters.find(c=>c.id===trophy.character)?.name||'Jogador';
   const date=new Date(trophy.date);const when=Number.isNaN(date.getTime())?'Data não registrada':date.toLocaleDateString('pt-BR');
-  item.textContent=(trophy.type==='worldcup'?'🌍 Copa Mundial · '+cupLabel(trophy.country)+' · ':'🏆 Torneio · ')+name+' · '+({easy:'Fácil',medium:'Médio',hard:'Difícil'}[trophy.difficulty])+' · '+(trophy.mode==='sets'?'3 sets':'Rápida')+' · '+when;list.append(item);
+  item.textContent=(trophy.type==='worldcup'?'🌍 Copa Mundial · '+cupLabel(trophy.country)+' · ':'🏆 Torneio · ')+name+' · '+({easy:'Fácil',medium:'Médio',hard:'Difícil'}[trophy.difficulty])+' · '+(trophy.mode==='sets'?'3 sets':'Rápida')+' · '+(trophy.playStyle==='arena'?'Arena':'Clássico')+' · '+when;list.append(item);
  }
  document.getElementById('trophy-empty').hidden=tournamentTrophies.length>0;
 }
@@ -42,9 +42,9 @@ function prepareTournament(){
   const selected=document.getElementById('player-character').value;
   const rivals=characters.filter(c=>c.id!==selected).map(c=>c.id);
   for(let i=rivals.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[rivals[i],rivals[j]]=[rivals[j],rivals[i]];}
-  tournament={rivals:rivals.slice(0,3),round:0,character:selected,uniform:document.getElementById('player-uniform').value,mode:document.getElementById('match-mode').value,difficulty:document.getElementById('difficulty').value,side:document.getElementById('table-side').value};
+  tournament={playStyle:selectedPlayStyle(),rivals:rivals.slice(0,3),round:0,character:selected,uniform:document.getElementById('player-uniform').value,mode:document.getElementById('match-mode').value,difficulty:document.getElementById('difficulty').value,side:document.getElementById('table-side').value};
  }
- document.getElementById('table-side').value=tournament.side==='top'?'top':'bottom';document.getElementById('player-character').value=tournament.character;
+ document.getElementById('play-style').value=tournament.playStyle||'classic';document.getElementById('table-side').value=tournament.side==='top'?'top':'bottom';document.getElementById('player-character').value=tournament.character;
  document.getElementById('player-uniform').value=tournament.uniform;
  document.getElementById('match-mode').value=tournament.mode;
  document.getElementById('difficulty').value=tournament.difficulty;
@@ -58,7 +58,7 @@ function finishTournamentRound(){
  document.getElementById('change-character').hidden=true;
  if(!won){ui.title.textContent='Torneio encerrado';ui.message.textContent+=' Você foi eliminado nas '+tournamentRounds[tournament.round].toLowerCase()+'. Tente conquistar o troféu novamente!';ui.start.textContent='Novo torneio';tournament=null;}
  else if(tournament.round===2){
-  const trophy={character:tournament.character,difficulty:tournament.difficulty,mode:tournament.mode,date:new Date().toISOString()};
+  const trophy={playStyle:tournament.playStyle||'classic',character:tournament.character,difficulty:tournament.difficulty,mode:tournament.mode,date:new Date().toISOString()};
   tournamentTrophies.push(trophy);tournamentTrophies=tournamentTrophies.slice(-50);
   try{localStorage.setItem('ping-pong-trophies-v1',JSON.stringify(tournamentTrophies));}catch{}
   showChampionCharacter();ui.overlay.dataset.result='champion';ui.title.textContent='🏆 Campeão do torneio!';ui.message.textContent+=' Você venceu as três rodadas e conquistou um troféu!';ui.start.textContent='Novo torneio';tournament=null;
@@ -81,6 +81,6 @@ document.getElementById('leave-tournament').addEventListener('click',()=>{tourna
 document.getElementById('resume-tournament').addEventListener('click',()=>{
  if(!validTournament(savedTournament))return;
  worldCup=null;renderWorldCup();tournament=JSON.parse(JSON.stringify(savedTournament));document.getElementById('competition').value='tournament';
- document.getElementById('table-side').value=tournament.side==='top'?'top':'bottom';document.getElementById('player-character').value=tournament.character;prepareTournament();updateCharacterPreviews();start();
+ document.getElementById('play-style').value=tournament.playStyle||'classic';document.getElementById('table-side').value=tournament.side==='top'?'top':'bottom';document.getElementById('player-character').value=tournament.character;prepareTournament();updateCharacterPreviews();start();
 });
 document.getElementById('new-tournament').addEventListener('click',()=>{tournament=null;saveTournament();document.getElementById('competition').value='tournament';updateCompetitionChoice();renderTournament();});

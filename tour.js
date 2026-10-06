@@ -1,6 +1,6 @@
 const tourSteps=[
  {target:'.character-slots',setup:true,title:'Seu personagem e seu rival',text:'Escolha personagem e uniforme. Leia o estilo do rival; você controla livremente seus próprios golpes. Você pode experimentar as opções durante este tutorial.'},
- {target:'.competition-choice',setup:true,title:'Partida ou torneio',text:'Partida avulsa permite escolher o rival. No torneio, enfrente três rivais sorteados e conquiste um troféu.'},
+ {target:'#competition',setup:true,title:'Partida, torneio ou Copa',text:'Partida avulsa permite escolher o rival. No torneio, enfrente três rivais sorteados. Na Copa Mundial, represente um país. Escolha Clássico ou Arena para qualquer competição. Na Arena, cinco devoluções carregam o especial: ative com Espaço ou pelo botão e rebata.'},
  {target:'#court-theme',setup:true,title:'Sua quadra',text:'Verde está disponível desde o início. As outras cores são recompensas por desafios; as cores não mudam as regras.'},
  {target:'.setup-options',setup:true,title:'Regras e dificuldade',text:'Escolha partida rápida ou três sets. Fácil, médio e difícil controlam a reação e precisão do adversário. Entrar na mesa inicia a partida depois da escolha do personagem.'},
  {target:'#gameCanvas',title:'Fique na frente da bola',text:'Use ← → ou A/D. No celular, toque na sua metade da quadra para posicionar o personagem; não é necessário arrastar. Os controles só atuam durante uma partida.'},
