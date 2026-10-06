@@ -23,3 +23,7 @@ Ao final, bolas ainda em trânsito são descartadas sem contar como erro. Compar
 A energia é consumida ao começar; a Chuva não recarrega energia durante si mesma. Devoluções contam para estatísticas e desafios da Arena. Pausar congela o cronômetro; reiniciar ou desistir remove as bolas e auxiliares. Funciona nos dois lados da mesa, em partida, torneio e Copa.
 
 Teste adicional: `node tests/rain.cjs` cobre ativação, auxiliares, devoluções, ponto único, empate, pausa, reinício, desistência, lados e simulação a 30/60/120 FPS. Conferir aparência e dificuldade no celular.
+
+## Ritmo da Chuva por dificuldade
+
+Fácil: novas bolas a cada 0,55 s, limite de cinco em circulação e velocidade 0,85. Médio: 0,45 s, seis bolas e velocidade 1. Difícil: 0,40 s, sete bolas e velocidade 1,10. A disputa permanece com cinco segundos em todos os níveis. Uma bola sua enviada para fora conta como erro seu; perder uma devolução interrompe a sequência dos desafios.

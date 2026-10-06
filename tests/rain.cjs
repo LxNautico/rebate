@@ -34,5 +34,11 @@ for(const side of ['top','bottom']){
 }
 start();startArenaRain();arenaRain.ownSaved=1;arenaRain.ownTotal=2;arenaRain.rivalSaved=2;arenaRain.rivalTotal=2;finishArenaRain();check(opponentPoints===1,'defence ratio opponent wins');
 start();startArenaRain();arenaRain.ownSaved=1;arenaRain.ownTotal=2;arenaRain.rivalSaved=2;arenaRain.rivalTotal=4;finishArenaRain();check(playerPoints===1,'tie favours activator');
+for(const level of ['easy','medium','hard']){
+ document.getElementById('difficulty').value=level;start();startArenaRain();check(arenaRain.settings===rainDifficulty[level],'difficulty settings');
+ for(let i=0;i<60;i++){advanceArenaRain(1/60);check(arenaRain.balls.length<=rainDifficulty[level].limit,'density bound');}
+}
+start();startArenaRain();arenaRain.balls=[{depth:.23,direction:-1,origin:.5,landing:1.2,curve:0,bounced:false,serial:0}];matchStats.currentSequence=8;advanceArenaRain(.05);check(arenaRain.ownTotal===1&&arenaRain.rivalTotal===0&&matchStats.currentSequence===0,'own outside penalty');
+start();startArenaRain();arenaRain.balls=[{depth:1.11,direction:1,origin:.5,landing:.1,curve:0,bounced:true,serial:0}];matchStats.currentSequence=8;swing=0;advanceArenaRain(.05);check(arenaRain.ownTotal===1&&matchStats.currentSequence===0,'miss resets sequence');
 console.log('PASS: rain activation, helpers, defence, one-point resolution, 30/60/120 FPS, pause, restart, quit and both sides.');
 `,sandbox);

@@ -28,9 +28,10 @@ document.getElementById('arena-special').addEventListener('click',armArena);
 document.getElementById('play-style').addEventListener('change',()=>{playStyle=selectedPlayStyle();loadBest();updatePoints();renderRanking();});
 
 // Separate five-second contest: ordinary rally physics is suspended.
+const rainDifficulty={easy:{interval:.55,limit:5,speed:.85},medium:{interval:.45,limit:6,speed:1},hard:{interval:.4,limit:7,speed:1.1}};
 function startArenaRain(){
  const helpers=characters.filter(c=>c.id!==opponentCharacter&&c.id!==playerCharacter).slice(0,2);
- arenaRain={time:0,spawn:0,balls:[],serial:0,ownSaved:0,ownTotal:0,rivalSaved:0,rivalTotal:0,helpers:helpers.map((c,i)=>({id:c.id,lane:i?7:1,side:i?1:-1,phase:0,hit:0})),leaving:false};
+ arenaRain={settings:rainDifficulty[difficulty]||rainDifficulty.easy,time:0,spawn:0,balls:[],serial:0,ownSaved:0,ownTotal:0,rivalSaved:0,rivalTotal:0,helpers:helpers.map((c,i)=>({id:c.id,lane:i?7:1,side:i?1:-1,phase:0,hit:0})),leaving:false};
  spawnRainBall(target===null?player:target,laneX(player));swing=0;
  ui.feedback.textContent='Chuva de bolas! Defenda durante cinco segundos.';
 }
@@ -52,7 +53,7 @@ function advanceArenaRain(dt){
  for(const helper of rain.helpers){helper.phase+=dt*15;helper.hit=Math.max(0,helper.hit-dt);}
  if(rain.time>=5){rain.leaving=true;rain.balls=[];swing=0;if(rain.time>=5.6)finishArenaRain();return;}
  rain.spawn+=dt;
- while(rain.spawn>=.4&&rain.time<3.8){rain.spawn-=.4;if(rain.balls.length<7){const lane=[1,4,7,2,6,3,5][rain.serial%7];spawnRainBall(lane,laneX(player));}}
+ while(rain.spawn>=rain.settings.interval&&rain.time<3.8){rain.spawn-=rain.settings.interval;if(rain.balls.length<rain.settings.limit){const lane=[1,4,7,2,6,3,5][rain.serial%7];spawnRainBall(lane,laneX(player));}}
  const defenders=[{lane:opponent,main:true},...rain.helpers];
  for(const defender of defenders){
   const incoming=rain.balls.filter(b=>b.direction===-1).sort((a,b)=>Math.abs(a.landing-laneX(defender.lane))-Math.abs(b.landing-laneX(defender.lane)))[0];
@@ -61,8 +62,8 @@ function advanceArenaRain(dt){
  opponent=defenders[0].lane;
  const remove=new Set();
  for(const b of rain.balls){
-  b.depth+=b.direction*1.1*dt;
-  if(!b.bounced&&(b.direction===1?b.depth:1-b.depth)>=.78){b.bounced=true;gameAudio.play('bounce');if(b.landing<0||b.landing>1){if(b.direction===1)rain.ownTotal++;else rain.rivalTotal++;remove.add(b);continue;}}
+  b.depth+=b.direction*rain.settings.speed*dt;
+  if(!b.bounced&&(b.direction===1?b.depth:1-b.depth)>=.78){b.bounced=true;gameAudio.play('bounce');if(b.landing<0||b.landing>1){if(b.direction===-1){rain.ownTotal++;matchStats.currentSequence=0;}else rain.rivalTotal++;remove.add(b);continue;}}
   if(b.direction===-1&&b.depth<=0){
    rain.rivalTotal++;const defender=defenders.reduce((best,d)=>Math.abs(laneX(d.lane)-b.landing)<Math.abs(laneX(best.lane)-b.landing)?d:best);
    if(Math.abs(laneX(defender.lane)-b.landing)<=.085){rain.rivalSaved++;b.direction=1;b.depth=0;b.origin=laneX(defender.lane);b.landing=laneX(Math.max(0,Math.min(8,player+(b.serial%3-1)*1.1)));b.curve=0;b.bounced=false;gameAudio.play('hit');if(defender.main)opponentAnimation=.38;else defender.hit=.38;}else remove.add(b);
@@ -70,7 +71,7 @@ function advanceArenaRain(dt){
  }
  const hittable=rain.balls.filter(b=>!remove.has(b)&&b.direction===1&&b.depth>=.8&&b.depth<=1.12&&Math.abs(laneX(player)-rainBallX(b))<=.075).sort((a,b)=>b.depth-a.depth);
  if(swing>0&&hittable.length){const b=hittable[0];rain.ownTotal++;rain.ownSaved++;score++;matchStats.currentSequence++;matchStats.longestSequence=Math.max(matchStats.longestSequence,matchStats.currentSequence);ui.score.textContent=score;updateChallenges();gameAudio.play('hit');playerAnimation=.38;playerPose=effect<0?1:2;swing=0;b.depth=1;b.direction=-1;b.origin=laneX(player);b.landing=gestureAim===null?laneX(target===null?player:target):laneX(gestureAim);gestureAim=null;b.curve=effect*.07;b.bounced=false;}
- for(const b of rain.balls)if(!remove.has(b)&&b.direction===1&&b.depth>1.12){rain.ownTotal++;remove.add(b);}
+ for(const b of rain.balls)if(!remove.has(b)&&b.direction===1&&b.depth>1.12){rain.ownTotal++;matchStats.currentSequence=0;remove.add(b);}
  rain.balls=rain.balls.filter(b=>!remove.has(b));
  ui.feedback.textContent='Chuva · '+Math.max(0,5-rain.time).toFixed(1)+'s · Você '+rain.ownSaved+'/'+rain.ownTotal+' · Rivais '+rain.rivalSaved+'/'+rain.rivalTotal;
 }
