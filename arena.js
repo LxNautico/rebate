@@ -93,7 +93,7 @@ function advanceArenaRain(dt){
  const remove=new Set();
  for(const b of rain.balls){
   b.depth+=b.direction*rain.settings.speed*athleteFactor(b.direction===-1?'player':'opponent','force')*dt;
-  if(!b.bounced&&(b.direction===1?b.depth:1-b.depth)>=.78){b.bounced=true;gameAudio.play('bounce');if(b.landing<0||b.landing>1){if(b.direction===-1){rain.ownTotal++;matchStats.currentSequence=0;}else rain.rivalTotal++;remove.add(b);continue;}musicalBounce(b.landing);}
+  if(!b.bounced&&(b.direction===1?b.depth:1-b.depth)>=.78){b.bounced=true;gameAudio.play('bounce');if(b.landing<0||b.landing>1){if(b.direction===-1){rain.ownTotal++;matchStats.currentSequence=0;}else rain.rivalTotal++;remove.add(b);continue;}musicalBounce(b.landing,b.direction===-1);}
   if(b.direction===-1&&b.depth<=0){
    rain.rivalTotal++;const defender=defenders.reduce((best,d)=>Math.abs(laneX(d.lane)-b.landing)<Math.abs(laneX(best.lane)-b.landing)?d:best);
    if(Math.abs(laneX(defender.lane)-b.landing)<=.085){rain.rivalSaved++;b.direction=1;b.depth=0;b.origin=laneX(defender.lane);b.landing=laneX(Math.max(0,Math.min(8,player+(b.serial%3-1)*1.1)));b.curve=0;b.bounced=false;gameAudio.play('hit');if(defender.main)opponentAnimation=.38;else defender.hit=.38;}else remove.add(b);
