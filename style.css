@@ -38,6 +38,25 @@ main{max-width:1300px;width:calc(100% - 24px)}.play-layout{grid-template-columns
 
 .character-style{display:block;font-size:12px;line-height:1.5;color:#ffdb84;min-height:54px;margin:8px 0;text-transform:none}
 
+#cup-country-choice[hidden],#saved-world-cup[hidden],#world-cup-panel[hidden],#cup-match[hidden],#leave-cup[hidden]{display:none}
+#saved-world-cup{border:1px solid #ffdb84;border-radius:10px;padding:10px;margin:10px 0;background:#193b3e}
+#saved-world-cup strong,#cup-match{color:#ffdb84}
+#saved-world-cup p{font-size:12px;line-height:1.4}
+#saved-world-cup>div{display:flex;gap:8px;flex-wrap:wrap}
+#saved-world-cup button,#leave-cup{font-size:12px;min-height:44px;padding:8px 12px}
+#leave-cup{margin:8px auto}
+#cup-match{background:#102b33;border:1px solid #52746c;border-radius:10px;padding:8px 12px;margin:0 0 8px;text-align:center;font-size:13px}
+#world-cup-panel{border-bottom:1px solid #52746c;margin-bottom:14px;padding-bottom:12px}
+#world-cup-panel summary{cursor:pointer;color:#ffdb84;font-size:12px;padding:8px 0}
+#world-cup-panel h3{font-size:12px;margin:8px 0 4px;color:#d2e7a1}
+#cup-tables{overflow-x:auto}
+#cup-tables table{border-collapse:collapse;width:100%;font-size:10px;margin-bottom:10px}
+#cup-tables th,#cup-tables td{padding:5px 3px;text-align:center;border-bottom:1px solid #36534f}
+#cup-tables th:first-child,#cup-tables td:first-child{text-align:left}
+#cup-tables .your-country{color:#ffdb84;background:#274448}
+#cup-bracket p{font-size:11px;line-height:1.5}
+.cup-rules{font-size:10px!important}
+
 /* Mobile: prioritize the court and keep only aim and shot controls. */
 @media(max-width:720px) and (orientation:portrait){
  .play-layout{grid-template-columns:minmax(0,1fr)}

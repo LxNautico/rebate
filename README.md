@@ -61,3 +61,7 @@ Execute `node tests/balance.cjs` na pasta do projeto. Confira sintaxe com `node 
 - Assets novos em img/<personagem>-celebration.png; Íris usa iris-celebration-v3.png. Gerados pela ferramenta integrada com os sprites atuais como referência de identidade, cinco uniformes, corpo inteiro, fundo transparente e poses sequenciais sem raquete. Íris usa três poses alternadas; os demais seis.
 - Ativação e duração dos intervalos mantidas; sequências testadas em todas as cores e modo de movimento reduzido. Conferir aparência no navegador.
 
+
+## Copa Mundial
+
+Escolha Copa Mundial e seu país para disputar grupos, quartas, semifinal e final contra 16 países representados pelos personagens existentes. Partidas dos demais países são simuladas. Progresso salvo e troféu mundial na galeria. Consulte `docs/COPA-MUNDIAL.md` para regras e testes.

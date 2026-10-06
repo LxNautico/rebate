@@ -24,7 +24,7 @@ function renderTrophyGallery(){
  for(const trophy of [...tournamentTrophies].reverse()){
   const item=document.createElement('li');const name=characters.find(c=>c.id===trophy.character)?.name||'Jogador';
   const date=new Date(trophy.date);const when=Number.isNaN(date.getTime())?'Data não registrada':date.toLocaleDateString('pt-BR');
-  item.textContent='🏆 '+name+' · '+({easy:'Fácil',medium:'Médio',hard:'Difícil'}[trophy.difficulty])+' · '+(trophy.mode==='sets'?'3 sets':'Rápida')+' · '+when;list.append(item);
+  item.textContent=(trophy.type==='worldcup'?'🌍 Copa Mundial · '+cupLabel(trophy.country)+' · ':'🏆 Torneio · ')+name+' · '+({easy:'Fácil',medium:'Médio',hard:'Difícil'}[trophy.difficulty])+' · '+(trophy.mode==='sets'?'3 sets':'Rápida')+' · '+when;list.append(item);
  }
  document.getElementById('trophy-empty').hidden=tournamentTrophies.length>0;
 }
@@ -72,15 +72,15 @@ function finishTournamentRound(){
  renderTournament();
 }
 function updateCompetitionChoice(){
- const selected=document.getElementById('competition').value==='tournament';
+ const choice=document.getElementById('competition').value;const selected=choice!=='single';document.getElementById('cup-country-choice').hidden=choice!=='worldcup';
  document.getElementById('opponent-character').disabled=selected;
- document.getElementById('competition-note').textContent=selected?'Três rodadas com rivais sorteados. Seu personagem, regras e dificuldade permanecem até o fim.':'Escolha seu adversário para treinar ou jogar uma partida.';
+ document.getElementById('competition-note').textContent=choice==='worldcup'?'16 países: três partidas de grupos, quartas, semifinal e final. Outras partidas são simuladas.':selected?'Três rodadas com rivais sorteados. Seu personagem, regras e dificuldade permanecem até o fim.':'Escolha seu adversário para treinar ou jogar uma partida.';
 }
 document.getElementById('competition').addEventListener('change',updateCompetitionChoice);
 document.getElementById('leave-tournament').addEventListener('click',()=>{tournament=null;document.getElementById('leave-tournament').hidden=true;renderTournament();openCharacterSetup();});
 document.getElementById('resume-tournament').addEventListener('click',()=>{
  if(!validTournament(savedTournament))return;
- tournament=JSON.parse(JSON.stringify(savedTournament));document.getElementById('competition').value='tournament';
+ worldCup=null;renderWorldCup();tournament=JSON.parse(JSON.stringify(savedTournament));document.getElementById('competition').value='tournament';
  document.getElementById('table-side').value=tournament.side==='top'?'top':'bottom';document.getElementById('player-character').value=tournament.character;prepareTournament();updateCharacterPreviews();start();
 });
 document.getElementById('new-tournament').addEventListener('click',()=>{tournament=null;saveTournament();document.getElementById('competition').value='tournament';updateCompetitionChoice();renderTournament();});
