@@ -9,3 +9,5 @@ O adversário também carrega energia e usa o especial automaticamente ao comple
 Rankings e recordes separam Clássico e Arena, preservando resultados antigos no Clássico. Esta primeira versão contém o especial de velocidade; poderes por personagem ficam para uma próxima etapa.
 
 Validação: `node tests/arena.cjs`. Os testes usam interface simulada; conferir aparência e controles no computador e celular.
+
+No celular, o botão especial fica imediatamente abaixo dos controles de golpe, dentro do mesmo painel. As barras compactas aparecem depois do botão, antes do ranking.

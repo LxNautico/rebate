@@ -161,3 +161,12 @@ body.tour-active .setup-panel{padding-bottom:280px}
 .reward-panel{margin:12px 0;border-bottom:1px solid #52746c;padding-bottom:10px}.reward-panel summary{cursor:pointer;font-size:12px;color:#ffdb84;min-height:36px;display:flex;align-items:center}.reward-panel ul{padding-left:18px;font-size:11px;line-height:1.6}#reward-notice{color:#ffdb84;font-size:12px;line-height:1.4}#reward-notice:empty{display:none}
 
 #arena-controls{border:1px solid #d89e51;border-radius:12px;padding:12px;margin:12px 0;background:#263e40}#arena-controls[hidden]{display:none}#arena-controls label{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px;font-size:12px}#arena-controls progress{width:100%;accent-color:#ffbd59}#arena-special{width:100%;background:#ffd079;color:#102b33;font-weight:bold}#arena-special:disabled{opacity:.55}#arena-hint{font-size:12px;margin-bottom:0}
+
+/* Keep Arena controls in the shot deck, before rankings on phones. */
+.touch-controls #arena-controls{margin:6px 0 0;padding:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px;grid-column:1 / -1;grid-row:4}
+.touch-controls #arena-controls[hidden]{display:none}
+#arena-special,#arena-hint{grid-column:1 / -1}
+.touch-controls #arena-controls label{grid-column:auto;grid-row:auto;margin:0;gap:4px;font-size:11px}
+#arena-controls progress{height:10px}
+#arena-hint{margin:0;font-size:11px;line-height:1.35}
+#arena-special{min-height:44px;padding:8px;touch-action:manipulation}
