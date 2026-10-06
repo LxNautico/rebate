@@ -71,3 +71,9 @@ Escolha Copa Mundial e seu país para disputar grupos, quartas, semifinal e fina
 Escolha Clássico ou Arena na preparação. Na Arena, cinco devoluções carregam o golpe especial de velocidade; ative com Espaço ou pelo botão no celular e rebata. Rankings são separados. Veja [as regras da Arena](docs/ARENA.md).
 
 A Arena também oferece **Chuva de bolas**: cinco segundos de disputa com dois auxiliares do adversário. Bolas azuis voltam para você; melhor proporção de devoluções ganha um ponto. Escolha o especial no painel de golpes.
+
+### Apresentação e histórias
+
+Ao fechar a seleção antes de uma partida, a quadra apresenta trocas automáticas entre os oito personagens. O botão Jogar permanece disponível. Não há som automático nem alteração do progresso. A preferência por movimento reduzido mostra uma cena estática.
+
+As [biografias e finais propostos](docs/HISTORIAS-PERSONAGENS.md) estão preparados para revisão; ainda não há cards de história durante as partidas. Teste: `node tests/presentation.cjs`.
