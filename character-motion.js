@@ -1,8 +1,9 @@
 // Visual animation only: never changes paddle position or collision geometry.
 const gait={player:{last:4,phase:0,amount:0},opponent:{last:4,phase:0,amount:0}};
 const celebrationImages={};
-for(const [id,definition] of Object.entries(CELEBRATION_FRAMES)){const image=new Image();celebrationImages[id]=image;image.src='img/'+definition.file;}
+for(const [id,definition] of Object.entries(typeof CELEBRATION_FRAMES==='undefined'?{}:CELEBRATION_FRAMES)){const image=new Image();celebrationImages[id]=image;image.src='img/'+definition.file;}
 function celebrationSource(id,color,progress,reduced=false){
+ if(typeof CELEBRATION_FRAMES==='undefined'||!CELEBRATION_FRAMES[id])return null;
  const img=celebrationImages[id];if(!img||!img.complete||!img.naturalWidth)return null;
  const sequences={maya:[0,1,2,3,4,4,3,5],caio:[0,1,2,2,3,4,4,5],alex:[0,1,2,3,3,4,5,5],rafa:[0,1,2,3,3,4,5,5],lia:[0,1,2,3,3,4,5,5],leo:[0,1,2,3,4,4,5,5],nina:[0,1,2,3,4,4,5,5],iris:[0,1,0,1,0,1,2,2]};
  const sequence=sequences[id];
