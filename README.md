@@ -1,89 +1,41 @@
 # Rebate!
 
-Jogo arcade independente de raquete, inspirado no tênis de mesa, com quadra em perspectiva vertical. Cada rival, um novo desafio. A integração ao universo Queima-Queima está adiada.
+Jogo arcade independente de raquete, com quadra em perspectiva vertical, oito personagens e nove destinos. A integração ao Queima-Queima continua adiada.
 
 ## Jogar
 
-Abra `index.html` no navegador, escolha personagem, uniforme, quadra, dificuldade e partida avulsa ou torneio. Para celular, use o pacote atual `Ping-Pong-celular-ranking.zip`: extraia todos os arquivos e disponibilize o conteúdo em um servidor acessível ao aparelho.
+[Abra o Rebate!](https://lxnautico.github.io/rebate/). A página começa na apresentação automática dos personagens, com quadras e uniformes variados. Clique em Jogar para escolher personagem, uniforme, modalidade, competição, dificuldade, quadra e lado.
 
-- ← → ou A/D: mover; 1–9: escolher destino; ↑: golpear.
-- Segure uma seta lateral junto de ↑ para dar curva.
-- “Mira reta” limpa o destino; não executa o golpe.
-- P ou Escape: pausar; Espaço: iniciar ou continuar.
-- No celular: toque na sua metade da quadra para mover; botões de golpe e gesto para cima ou diagonal. Deslize lateral excessivo pode mandar a bola para fora.
+- ← → ou A/D: mover. 1–9: destino da bola.
+- ↑: golpear no lado inferior; ↓ no superior. Combine com uma seta lateral para curva.
+- No celular, toque na sua metade para indicar para onde correr. Use Golpear, Efeito ou o gesto na direção do lado escolhido.
+- Mira reta limpa o destino; não rebate. P ou Escape pausa. Espaço prepara o especial na Arena; fora da partida, abre as escolhas ou continua.
+- Pausa oferece continuar, reiniciar e desistir. Fechar a seleção permite voltar a explorar a página.
 
-Partida rápida até cinco pontos ou melhor de três sets até onze, com dois de vantagem. Saques alternam a cada dois pontos; em 10 × 10, a cada ponto. O saque quica dos dois lados.
+Partida rápida até cinco pontos ou melhor de três sets até onze, sempre com dois de vantagem. Saques alternam a cada dois pontos; em 10 × 10, a cada ponto.
 
-## Progresso
+## Competições e modalidades
 
-Ranking, desafios, troféus e quadras ficam neste navegador. Torneio tem quartas, semifinal e final contra três rivais distintos. “Continuar torneio” retoma a rodada com placar zerado. Desistir descarta o torneio; voltar à seleção entre rodadas preserva a retomada.
+Partida avulsa, torneio de três rodadas ou Copa Mundial com dezesseis países, grupos e eliminatórias. Todos os rivais são controlados pelo computador. Torneio e Copa guardam o progresso entre rodadas; retomar reinicia a partida atual com placar zerado.
 
-Quadra verde livre. Azul: torneios vencidos com dois personagens diferentes. Roxa: dez devoluções na mesma troca. Terracota: vitória no médio. Resultados anteriores ainda registrados também contam.
+Clássico usa golpes comuns. Arena oferece velocidade, Chuva de bolas de cinco segundos e oito especiais próprios dos personagens. O adversário também usa poderes. [Regras da Arena](docs/ARENA.md).
 
-## Organização
+Arena musical é opcional: quiques tocam notas, mas somente suas devoluções no lado adversário compõem a sequência; saques não contam. As três melodias originais liberam uma dança conjunta depois do ponto, uma vez por partida, com Pular. [Sequências musicais](docs/ARENA-MUSICAL.md).
 
-- `script.js`: partida, controles, projeção e animações.
-- `personalities.js`: estilos dos adversários e ritmo das trocas.
-- `tournament.js`, `results.js`, `challenges.js`, `rewards.js`: progresso e competições.
-- `audio.js`, `sprite-masks.js`, `img/`, `songs/`: sons e apresentação.
-- `docs/VERSAO-ESTAVEL.md`: funcionalidades, validação e limitações atuais.
-- `docs/HISTORICO-README.md`: registros anteriores, incluindo descrições obsoletas.
-- `ROTEIRO.md`: propostas históricas; consulte a versão estável para o estado atual.
-- `Instrucoes.txt`, vídeo e rascunho: referências originais preservadas.
-- `backups/`: cópias de segurança; ZIP antigo para celular é legado.
+## Personagens e progresso
 
-## Verificar
+Força, Agilidade e Técnica têm efeitos reais e aparecem nas extremidades da quadra. Partidas concluídas rendem XP salvo por personagem; aumentos valem na partida seguinte. Desistir e reiniciar não concede XP descartado. [Atributos](docs/ATRIBUTOS.md).
 
-Execute `node tests/balance.cjs` na pasta do projeto. Confira sintaxe com `node --check script.js` e o mesmo comando para os demais arquivos JavaScript. Testes de lógica não substituem conferência visual no navegador e celular.
+Histórias aparecem após vitórias de sets e partidas, com Continuar e Pular. Capítulos vistos não se repetem automaticamente. A galeria na seleção permite reler histórias e finais. Campeões de torneio ou Copa recebem uma cena final ilustrada e animada junto ao troféu. [Histórias e finais](docs/HISTORIAS-PERSONAGENS.md).
 
-### Explorar e aprender
-- Fechar na seleção permite olhar a página; Jogar reabre as escolhas. Personagem continua obrigatório para entrar na partida.
-- Tutorial guiado de oito etapas destaca escolhas, regras, quadra, movimento, mira, golpes e progresso. Pode voltar, avançar ou fechar; não inicia partidas automaticamente.
-- Avisos de ponto ficam acima do tabuleiro, fora dos personagens, preservando suas reações.
+Rankings separados por Clássico/Arena, regra de pontuação e dificuldade. Desafios, troféus, atributos e quadras ficam no navegador e endereço usados; não há contas nem sincronização entre aparelhos.
 
+Quadra verde livre; azul exige títulos com dois personagens diferentes; roxa exige dez devoluções na mesma troca; terracota exige vitória no Médio. O botão i na escolha da quadra informa requisitos e progresso.
 
-### Passos e comemorações especiais
-- Animação visual segmentada das pernas ao deslocar lateralmente; para ao ficar imóvel e congela durante a pausa. Não altera colisões.
-- Oito assinaturas visuais: salto, giro acrobático, reverência, balanço, giro surpresa, dois saltos, saudação e dança. Ativadas em vitória de set/partida ou ponto com dez devoluções na troca, dentro do intervalo existente.
-- Movimento reduzido preserva poses estáticas. Ajoelhar com braços erguidos e mandar beijos requerem novos sprites; não estão implementados com as poses atuais.
-- Verificados trajetórias finitas, deslocamento, parada, reset e sintaxe. Conferir aparência no navegador.
+## Verificar e distribuir
 
+Execute `node tests/run.cjs`: confere sintaxe, referências de arquivos, IDs de interface e todas as suítes automatizadas. Isso não substitui testar visual, som e resposta de toque no aparelho.
 
-### Poses especiais: Maya e Caio
-- Novas folhas geradas com ferramenta integrada de imagem, usando personagens existentes como referência: Maya ajoelha e ergue ambos os braços; Caio leva a mão aos lábios e manda beijos para os dois lados.
-- Cinco cores, seis poses por cor, recortes em celebration-frames.js e reprodução em character-motion.js. Aparecem nas comemorações especiais; voltam às poses normais antes do saque.
-- Assets: img/maya-celebration.png e img/caio-celebration-v2.png. Prompt: folha transparente 6 colunas × 5 cores, identidade preservada, sequência de ajoelhar/erguer braços ou mandar beijos, sem raquete, corpo completo.
-- Reprodução e cores verificadas por teste de lógica. Conferir gestos e enquadramento no navegador/celular.
+Pacote atual: `Ping-Pong-celular-ranking.zip`. Extraia tudo junto; index.html, JavaScript, CSS, img e songs são necessários. [Acesso pelo celular](docs/ACESSO-CELULAR.md).
 
-
-### Comemorações dos oito personagens
-- Alex: salto com punhos erguidos. Rafa: cambalhota. Lia: reverência e aceno. Léo: giro com braços abertos. Nina: dois saltos. Íris: passos de dança e braços erguidos. Maya e Caio mantêm suas comemorações aprovadas.
-- Assets novos em img/<personagem>-celebration.png; Íris usa iris-celebration-v3.png. Gerados pela ferramenta integrada com os sprites atuais como referência de identidade, cinco uniformes, corpo inteiro, fundo transparente e poses sequenciais sem raquete. Íris usa três poses alternadas; os demais seis.
-- Ativação e duração dos intervalos mantidas; sequências testadas em todas as cores e modo de movimento reduzido. Conferir aparência no navegador.
-
-
-## Copa Mundial
-
-Escolha Copa Mundial e seu país para disputar grupos, quartas, semifinal e final contra 16 países representados pelos personagens existentes. Partidas dos demais países são simuladas. Progresso salvo e troféu mundial na galeria. Consulte `docs/COPA-MUNDIAL.md` para regras e testes.
-
-### Modalidade Arena
-
-Escolha Clássico ou Arena na preparação. Na Arena, cinco devoluções carregam o golpe especial de velocidade; ative com Espaço ou pelo botão no celular e rebata. Rankings são separados. Veja [as regras da Arena](docs/ARENA.md).
-
-A Arena também oferece **Chuva de bolas**: cinco segundos de disputa com dois auxiliares do adversário. Bolas azuis voltam para você; melhor proporção de devoluções ganha um ponto. Escolha o especial no painel de golpes.
-
-### Apresentação e histórias
-
-A página abre na apresentação automática dos oito personagens. Clique em Jogar para abrir as escolhas; fechar a seleção antes da partida retorna à apresentação. O botão Jogar permanece disponível. Não há som automático nem alteração do progresso. A preferência por movimento reduzido mostra uma cena estática.
-
-As [biografias e finais propostos](docs/HISTORIAS-PERSONAGENS.md) foram aprovados: cards aparecem após vitórias de sets e partidas, e finais narrados acompanham os troféus. A galeria na seleção permite reler; Continuar e Pular liberam o jogo. Teste: `node tests/presentation.cjs`.
-
-A opção **Especial do personagem** na Arena oferece oito poderes próprios. O painel informa o efeito; o rival também usa seu poder. Velocidade e Chuva de bolas permanecem disponíveis. Valores iniciais ainda precisam de avaliação de jogabilidade no celular.
-
-Os finais individuais agora incluem pequenas cenas ilustradas e animadas junto do troféu e na galeria, com cenários, familiares e atividades das biografias. Movimento reduzido mantém a cena estática. Validação: `node tests/endings.cjs`.
-
-### Atributos e evolução
-
-Os atletas têm Força, Agilidade e Técnica com efeitos reais e barras na quadra. No celular, o toque indica para onde correr. Partidas concluídas concedem XP salvo por personagem; aumentos entram na próxima partida. Veja [atributos e treinamento](docs/ATRIBUTOS.md).
-
-A preparação oferece **Arena musical**: nove notas nos quiques e três melodias originais que liberam uma dança conjunta de cinco segundos depois do ponto. Uma dança por partida, com Pular. Veja [as regras musicais](docs/ARENA-MUSICAL.md).
+[Estado da versão consolidada](docs/VERSAO-ESTAVEL.md). Backups ficam em backups; não são publicados. ROTEIRO.md, Instrucoes.txt e docs/HISTORICO-README.md são registros históricos e podem conter propostas antigas.

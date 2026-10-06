@@ -1,35 +1,40 @@
-# Versão estável local — 2026-10-04
+# Rebate! — versão consolidada em 06/10/2026
 
-Projeto independente. A integração ao Queima-Queima fica adiada. O nome Ping-Pong permanece provisório.
+Projeto independente publicado no GitHub Pages. Integração ao Queima-Queima adiada.
 
-## Funcionalidades prontas
+## Implementado
 
-- Mesa em perspectiva vertical, três raias visuais, nove destinos e movimento lateral contínuo.
-- Golpes manuais, curvas laterais, faltas por bola fora e saques alternados.
-- Partida rápida até cinco ou melhor de três sets até onze, sempre com dois pontos de vantagem.
-- Oito personagens, cinco uniformes, estilos próprios dos adversários e três dificuldades.
-- Teclado, botões, barra e gestos para celular; pausa, reinício e desistência.
-- Sons, orientação contextual, reações entre pontos e apresentação do campeão.
-- Ranking local, desafios, torneio de três rodadas, retomada por rodada e galeria de troféus.
-- Quatro cores de quadra, três desbloqueadas por conquistas.
+- Apresentação automática com oito personagens, quatro quadras e cinco uniformes.
+- Nove destinos, movimento lateral, teclado e toque que indica para onde correr; escolha dos dois lados da mesa.
+- Saques alternados, curvas, faltas, rápida até cinco ou três sets até onze, com dois de vantagem.
+- Oito estilos de adversário, três dificuldades, pausa, reinício e desistência.
+- Torneio de três rodadas e Copa Mundial de dezesseis países; salvamento entre partidas e bandeiras junto à quadra.
+- Arena: velocidade, Chuva de bolas ajustada por dificuldade e oito poderes individuais.
+- Arena musical opcional: três sequências das suas devoluções, sem saques; dança conjunta depois do ponto, cinco segundos e Pular, uma por partida.
+- Atributos reais, barras, XP por personagem e crescimento limitado aplicado na próxima partida.
+- Sons gravados e sintetizados, tutorial, orientação e informação de desbloqueio das quadras.
+- Ranking local, desafios, troféus, recompensas, histórias e oito finais visuais.
+- Movimento reduzido e texto descritivo das cenas; escolhas só abrem ao clicar em Jogar.
 
-## Validação e limites
+## Validação
 
-O usuário validou jogabilidade, torneio e apresentação durante o desenvolvimento. Testes automatizados de decisões cobrem 72.000 devoluções e 72.000 saques, além de leitura de movimento em 30, 60 e 120 FPS. Essas verificações não substituem testes visuais em diferentes navegadores e aparelhos nem medem taxas de vitória humanas.
+`node tests/run.cjs` executa as suítes de física/estilos, Copa, Arena, poderes, atributos, música/áudio, histórias, apresentação, finais e recuperação do desenho, além de sintaxe e vínculos da interface. Inclui 72.000 devoluções e 72.000 saques simulados e 200 Copas completas. Simulações não medem taxas de vitória humanas.
 
-- Dados são locais ao navegador e origem. Outro aparelho ou endereço não compartilha progresso; limpar dados pode apagá-lo.
-- Retomar um torneio reinicia a rodada com placar zerado, sem restaurar uma bola em andamento.
-- Até cinquenta troféus são mantidos; ranking conserva dez resultados por categoria.
-- Efeitos são curvas de uma simulação arcade, sem rotação física completa.
-- Não há multiplayer, contas ou sincronização online. Recompensas mudam somente cores.
-- Sons dependem da interação inicial e das permissões do navegador.
+O usuário confirmou as três melodias depois da correção para contar somente suas devoluções. Também aprovou apresentação e finais durante o desenvolvimento. Conferir novamente no aparelho: corrida por toque, controles com os dois lados, volume musical, dança/Pular, pausas ao trocar de aplicativo e leitura dos resultados. Essa conferência física não foi concluída automaticamente nesta consolidação.
 
-## Distribuição
+## Limites conhecidos
 
-Use `Ping-Pong-celular-ranking.zip`, extraindo todo o conteúdo junto. O antigo `Ping-Pong-celular.zip` não representa a versão atual.
+- Progresso local ao navegador e origem; não há multiplayer, contas ou sincronização.
+- Retomar competição reinicia a partida atual, sem restaurar uma bola em andamento.
+- Ranking mantém dez resultados por categoria; galeria mantém até cinquenta troféus.
+- Evolução: até 10 XP por atributo/partida, 40 XP por ponto e até 15 pontos adicionais por atributo. Rivais usam perfil inicial.
+- Rankings anteriores foram preservados, apesar das mudanças de balanceamento.
+- Efeitos são arcade; parentes nos finais são figuras ilustradas.
+- Áudio depende da interação inicial; falhas de áudio não devem parar o jogo.
+- Valores de poderes e movimento ainda podem ser ajustados conforme testes humanos.
 
-Backup em `backups/Ping-Pong-estavel-*.zip`, criado antes da revisão documental. Inclui código, assets, testes e referências originais; exclui outros ZIPs e a pasta de backups. O pacote de distribuição contém o jogo e documentação atualizada; vídeo e rascunho ficam no projeto e no backup.
+## Distribuição e backup
 
-## Próximas decisões
+Pacote atual: Ping-Pong-celular-ranking.zip. Backup consolidado: backups/Rebate-consolidado-2026-10-06_*.zip. Inclui jogo, imagens, sons, testes e documentação; exclui backups anteriores, ZIPs e arquivos temporários de revisão. Não apaga backups antigos. O pacote de distribuição exclui os vídeos de referência.
 
-Escolher nome e identidade próprios; continuar coletando observações de jogadores; avaliar novos desafios e cosméticos. Nenhuma integração ao Queima-Queima nesta etapa.
+Próximos trabalhos são ajustes apontados pelo teste no aparelho e manutenção; novas funcionalidades podem ser planejadas após essa conferência.

@@ -8,5 +8,5 @@ function renderMusical(){const box=document.getElementById('musical-status');box
 function beginMusicalDance(){if(!musicalEnabled||!musicalPending||musicalUsed)return false;musicalUsed=true;musicalDance={song:musicalPending,elapsed:0};renderArena();held.clear();touchMoveTarget=null;swing=0;gameAudio.stop();gameAudio.music?.(musicalDance.song.notes,0);renderMusical();return true;}
 function finishMusicalDance(){if(!musicalDance||state!=='playing')return;musicalDance=null;musicalPending=null;held.clear();gameAudio.stop();renderMusical();finishPointTransition();}
 function advanceMusicalDance(dt){musicalDance.elapsed+=dt;if(musicalDance.elapsed>=5)finishMusicalDance();else renderMusical();}
-function resumeMusicalAudio(){if(musicalDance)gameAudio.music?.(musicalDance.song.notes,musicalDance.elapsed);}
+function resumeMusicalAudio(){if(musicalDance&&state==='playing')gameAudio.music?.(musicalDance.song.notes,musicalDance.elapsed);}
 document.getElementById('musical-skip').addEventListener('click',finishMusicalDance);

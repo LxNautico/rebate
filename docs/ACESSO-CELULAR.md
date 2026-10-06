@@ -1,33 +1,25 @@
-# Versão celular e acesso por link
+# Rebate! no celular
 
-O jogo é estático: não precisa de servidor de banco de dados ou instalação de dependências. O pacote atual é `Ping-Pong-celular-ranking.zip`.
+Endereço do jogo: https://lxnautico.github.io/rebate/
+Repositório: https://github.com/LxNautico/rebate
 
-## Publicar
+A página abre na apresentação. Toque em Jogar para escolher opções e entrar na partida. Na quadra, toque na sua metade para indicar o destino da corrida; a agilidade do atleta determina a velocidade. Não é necessário arrastar. Escolha 1–9 para mirar e use os botões de golpe ou gesto para rebater.
 
-Extraia o pacote e publique seu conteúdo em uma hospedagem de páginas estáticas. `index.html` deve ficar na raiz do endereço publicado, junto dos arquivos JavaScript, CSS, `img/` e `songs/`. Preserve nomes e caminhos; enviar apenas index.html não funciona.
+Embaixo: golpe/gesto para cima. Em cima: golpe/gesto para baixo. Esquerda/direita e destinos continuam seguindo a tela. Torneio e Copa preservam o lado.
 
-Abra o endereço publicado no navegador do celular. A hospedagem e o endereço público ainda precisam ser definidos; nenhum link público foi criado nesta etapa.
+## Conferência da versão consolidada
 
-## Conferir no aparelho
+- Apresentação, abrir Jogar, fechar X e reabrir escolhas.
+- Partida nos dois lados; corrida por toque, números, golpe e curvas.
+- Clássico, poderes da Arena e Chuva de bolas nas três dificuldades.
+- Arena musical: 1–3–5–3, 2–4–6–5–2 e 5–7–8–9–8–5 nas suas devoluções durante uma mesma troca. Saques e notas adversárias não contam. Conferir dança, Pular e Som desligado.
+- Pausa ao trocar de aplicativo, continuar, reiniciar e desistir.
+- Histórias, finais, barras, resumo de XP e progresso depois de recarregar.
+- Continuar torneio/Copa, lembrando que a partida atual volta a zero.
+- Tela vertical e horizontal; controles acessíveis e texto legível.
 
-- Escolha personagens, regras e dificuldade; feche a seleção e reabra pelo botão amarelo Jogar.
-- Confira toque para posição na quadra, destinos, golpe e gesto diagonal.
-- Teste som após tocar na tela, pausa ao trocar de aplicativo, orientação vertical e horizontal.
-- Confira comemorações, troféus e retomada do torneio após recarregar.
+## Arquivos e progresso
 
-Progresso fica no navegador e no endereço utilizado. Dados do jogo aberto como arquivo local ou em outro endereço não aparecem automaticamente no link publicado.
+Ping-Pong-celular-ranking.zip é o pacote atual. Extraia todos os arquivos e preserve img, songs, scripts e CSS. A aplicação é estática. O repositório de publicação recebe os arquivos do jogo, sem backups nem ZIPs.
 
-## Escolher o lado
-
-Na preparação, escolha Embaixo (↑) ou Em cima (↓). No lado superior, deslize para baixo para golpear e toque na metade superior da mesa para se posicionar. Esquerda e direita continuam seguindo os lados da tela; destinos 1–9 também seguem da esquerda para direita. O torneio preserva o lado escolhido. Regras e pontuação não mudam.
-
-## GitHub Pages
-
-1. Crie um repositório para o jogo e envie os arquivos extraídos do pacote, com index.html na raiz. Não envie backups nem ZIPs para esse repositório de distribuição.
-2. Abra Settings → Pages → Build and deployment → Source: Deploy from a branch.
-3. Selecione a branch main e a pasta / (root); salve.
-4. Aguarde a publicação e abra o endereço exibido na página Pages no celular.
-
-O arquivo .nojekyll acompanha o pacote. Nenhum repositório foi criado ou publicado automaticamente.
-
-Referência: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
+O progresso fica no navegador e no endereço usados. Arquivo local, site, outro navegador e outro aparelho têm armazenamentos separados. Recarregar a página para receber uma atualização não exige apagar os dados do jogo.

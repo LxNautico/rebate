@@ -72,7 +72,7 @@ const gameAudio = (() => {
   }
   button.addEventListener('click', () => {
     enabled = !enabled;
-    if (enabled) unlock(); else stop();
+    if (enabled) { unlock(); if(typeof resumeMusicalAudio==='function')resumeMusicalAudio(); } else stop();
     try { localStorage.setItem('ping-pong-sound', enabled ? 'on' : 'off'); } catch {}
     refresh();
   });
