@@ -1,20 +1,23 @@
 let playStyle='classic',arenaEnergy=0,rivalEnergy=0,arenaArmed=false;
+let arenaRain=null;
 const selectedPlayStyle=()=>document.getElementById('play-style').value==='arena'?'arena':'classic';
 function renderArena(){
  const active=playStyle==='arena';document.getElementById('arena-controls').hidden=!active;
  document.getElementById('arena-energy').value=arenaEnergy;document.getElementById('rival-energy').value=rivalEnergy;
  document.getElementById('arena-energy-text').textContent=arenaEnergy+'/100';
- const button=document.getElementById('arena-special');button.disabled=arenaEnergy<100||state!=='playing'||serving||pointDelay>0;
- button.textContent=arenaArmed?'Especial preparado · cancelar':'Golpe especial · Espaço';button.setAttribute('aria-pressed',String(arenaArmed));
- document.getElementById('arena-hint').textContent=arenaArmed?'Rebata no momento certo para usar o especial.':arenaEnergy===100?'Energia cheia! Ative o especial durante a troca de bola.':'Cada devolução carrega 20 de energia. O especial acelera a bola em 35%.';
+ const button=document.getElementById('arena-special');document.getElementById('arena-power').disabled=!!arenaRain||arenaArmed;
+ button.disabled=!!arenaRain||arenaEnergy<100||state!=='playing'||serving||pointDelay>0;
+ button.textContent=arenaRain?'Bolas azuis voltam para você. Defenda! Uma disputa vale um ponto.':arenaArmed?'Especial preparado · cancelar':(document.getElementById('arena-power').value==='rain'?'Chuva de bolas · Espaço':'Golpe especial · Espaço');button.setAttribute('aria-pressed',String(arenaArmed));
+ document.getElementById('arena-hint').textContent=arenaRain?'Bolas azuis voltam para você. Defenda! Uma disputa vale um ponto.':arenaArmed?'Rebata no momento certo para usar o especial.':arenaEnergy===100?'Energia cheia! Ative o especial durante a troca de bola.':(document.getElementById('arena-power').value==='rain'?'Cinco devoluções carregam a Chuva: disputa de 5s, com dois auxiliares. Melhor proporção de defesas ganha um ponto; empate favorece você.':'Cada devolução carrega 20 de energia. O especial acelera a bola em 35%.');
 }
-function resetArena(){playStyle=selectedPlayStyle();arenaEnergy=rivalEnergy=0;arenaArmed=false;renderArena();}
-function armArena(){if(playStyle!=='arena'||state!=='playing'||pointDelay>0||serving||arenaEnergy<100)return;arenaArmed=!arenaArmed;renderArena();}
+function resetArena(){arenaRain=null;playStyle=selectedPlayStyle();arenaEnergy=rivalEnergy=0;arenaArmed=false;renderArena();}
+function armArena(){if(arenaRain||playStyle!=='arena'||state!=='playing'||pointDelay>0||serving||arenaEnergy<100)return;arenaArmed=!arenaArmed;renderArena();}
 function arenaReturn(own){if(playStyle!=='arena')return;if(own)arenaEnergy=Math.min(100,arenaEnergy+20);else rivalEnergy=Math.min(100,rivalEnergy+20);renderArena();}
 function arenaShot(own,isServe=false){
  ball.special=false;
  if(playStyle!=='arena'||isServe)return;
  if(own?arenaArmed&&arenaEnergy===100:rivalEnergy===100){
+  if(own&&document.getElementById('arena-power').value==='rain'){arenaEnergy=0;arenaArmed=false;startArenaRain();renderArena();return;}
   ball.special=true;ball.speed=(own?1:(ball.speed||1))*1.35;
   if(own){arenaEnergy=0;arenaArmed=false;}else rivalEnergy=0;
   ui.feedback.textContent=own?'Seu golpe especial de velocidade!':'Especial do adversário! Prepare a defesa.';
@@ -23,3 +26,68 @@ function arenaShot(own,isServe=false){
 function drawArenaTrail(p){if(!ball.special)return;ctx.save();ctx.strokeStyle='#ff8d42';ctx.lineWidth=6*p.scale;ctx.beginPath();ctx.moveTo(p.x,p.y);const previous=Math.max(0,shotProgress()-.08),depth=ball.direction===1?previous:1-previous;const q=project(shotX(previous),depth,ballHeight());ctx.lineTo(q.x,q.y);ctx.stroke();ctx.restore();}
 document.getElementById('arena-special').addEventListener('click',armArena);
 document.getElementById('play-style').addEventListener('change',()=>{playStyle=selectedPlayStyle();loadBest();updatePoints();renderRanking();});
+
+// Separate five-second contest: ordinary rally physics is suspended.
+function startArenaRain(){
+ const helpers=characters.filter(c=>c.id!==opponentCharacter&&c.id!==playerCharacter).slice(0,2);
+ arenaRain={time:0,spawn:0,balls:[],serial:0,ownSaved:0,ownTotal:0,rivalSaved:0,rivalTotal:0,helpers:helpers.map((c,i)=>({id:c.id,lane:i?7:1,side:i?1:-1,phase:0,hit:0})),leaving:false};
+ spawnRainBall(target===null?player:target,laneX(player));swing=0;
+ ui.feedback.textContent='Chuva de bolas! Defenda durante cinco segundos.';
+}
+function spawnRainBall(lane,origin){
+ const rain=arenaRain;rain.balls.push({depth:1,origin,landing:laneX(lane),direction:-1,curve:effect*.07,serial:rain.serial++,bounced:false});
+}
+function rainBallX(b){const t=Math.min(1,(b.direction===1?b.depth:1-b.depth)/.78);return b.origin+(b.landing-b.origin)*t+b.curve*Math.sin(Math.PI*t);}
+function finishArenaRain(){
+ const rain=arenaRain;const ownRate=rain.ownTotal?rain.ownSaved/rain.ownTotal:0,rivalRate=rain.rivalTotal?rain.rivalSaved/rain.rivalTotal:0;
+ arenaRain=null;swing=0;
+ point(ownRate>=rivalRate?1:-1,'Chuva de bolas: você defendeu '+rain.ownSaved+'/'+rain.ownTotal+'; adversários '+rain.rivalSaved+'/'+rain.rivalTotal+'.'+(ownRate===rivalRate?' Empate: vantagem de quem ativou.':''));
+}
+function advanceArenaRain(dt){
+ const rain=arenaRain;if(!rain)return;
+ rain.time+=dt;
+ const move=(held.has('arrowright')||held.has('d')?1:0)-(held.has('arrowleft')||held.has('a')?1:0);
+ if(!held.has(hitKey()))chooseLane(player+move*7*dt);
+ playerAnimation=Math.max(0,playerAnimation-dt);opponentAnimation=Math.max(0,opponentAnimation-dt);swing=Math.max(0,swing-dt);
+ for(const helper of rain.helpers){helper.phase+=dt*15;helper.hit=Math.max(0,helper.hit-dt);}
+ if(rain.time>=5){rain.leaving=true;rain.balls=[];swing=0;if(rain.time>=5.6)finishArenaRain();return;}
+ rain.spawn+=dt;
+ while(rain.spawn>=.4&&rain.time<3.8){rain.spawn-=.4;if(rain.balls.length<7){const lane=[1,4,7,2,6,3,5][rain.serial%7];spawnRainBall(lane,laneX(player));}}
+ const defenders=[{lane:opponent,main:true},...rain.helpers];
+ for(const defender of defenders){
+  const incoming=rain.balls.filter(b=>b.direction===-1).sort((a,b)=>Math.abs(a.landing-laneX(defender.lane))-Math.abs(b.landing-laneX(defender.lane)))[0];
+  if(incoming){const desired=Math.max(0,Math.min(8,incoming.landing*9-.5)),delta=desired-defender.lane;defender.lane+=Math.sign(delta)*Math.min(Math.abs(delta),difficulties[difficulty].tracking*dt);}
+ }
+ opponent=defenders[0].lane;
+ const remove=new Set();
+ for(const b of rain.balls){
+  b.depth+=b.direction*1.1*dt;
+  if(!b.bounced&&(b.direction===1?b.depth:1-b.depth)>=.78){b.bounced=true;gameAudio.play('bounce');if(b.landing<0||b.landing>1){if(b.direction===1)rain.ownTotal++;else rain.rivalTotal++;remove.add(b);continue;}}
+  if(b.direction===-1&&b.depth<=0){
+   rain.rivalTotal++;const defender=defenders.reduce((best,d)=>Math.abs(laneX(d.lane)-b.landing)<Math.abs(laneX(best.lane)-b.landing)?d:best);
+   if(Math.abs(laneX(defender.lane)-b.landing)<=.085){rain.rivalSaved++;b.direction=1;b.depth=0;b.origin=laneX(defender.lane);b.landing=laneX(Math.max(0,Math.min(8,player+(b.serial%3-1)*1.1)));b.curve=0;b.bounced=false;gameAudio.play('hit');if(defender.main)opponentAnimation=.38;else defender.hit=.38;}else remove.add(b);
+  }
+ }
+ const hittable=rain.balls.filter(b=>!remove.has(b)&&b.direction===1&&b.depth>=.8&&b.depth<=1.12&&Math.abs(laneX(player)-rainBallX(b))<=.075).sort((a,b)=>b.depth-a.depth);
+ if(swing>0&&hittable.length){const b=hittable[0];rain.ownTotal++;rain.ownSaved++;score++;matchStats.currentSequence++;matchStats.longestSequence=Math.max(matchStats.longestSequence,matchStats.currentSequence);ui.score.textContent=score;updateChallenges();gameAudio.play('hit');playerAnimation=.38;playerPose=effect<0?1:2;swing=0;b.depth=1;b.direction=-1;b.origin=laneX(player);b.landing=gestureAim===null?laneX(target===null?player:target):laneX(gestureAim);gestureAim=null;b.curve=effect*.07;b.bounced=false;}
+ for(const b of rain.balls)if(!remove.has(b)&&b.direction===1&&b.depth>1.12){rain.ownTotal++;remove.add(b);}
+ rain.balls=rain.balls.filter(b=>!remove.has(b));
+ ui.feedback.textContent='Chuva · '+Math.max(0,5-rain.time).toFixed(1)+'s · Você '+rain.ownSaved+'/'+rain.ownTotal+' · Rivais '+rain.rivalSaved+'/'+rain.rivalTotal;
+}
+function drawArenaRain(){
+ const rain=arenaRain;if(!rain)return;
+ const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ for(const helper of rain.helpers){
+  const p=project(laneX(helper.lane),0),near=isTopSide(),size=near?155:96;
+  const travel=rain.leaving?Math.min(1,(rain.time-5)/.6):1-Math.min(1,rain.time/.6);
+  const x=p.x+(helper.side<0?-p.x-size:800-p.x+size)*travel;
+  const source=spriteSource(helper.id,opponentUniform,near,helper.hit>0?(helper.side<0?1:2):0);
+  if(source){ctx.save();ctx.translate(x,near?884:176);drawWalkingSprite(ctx,source,size,{phase:helper.phase,amount:travel>0?.95:.4},reduced);ctx.restore();}
+ }
+ for(const b of rain.balls)if(b.direction===1&&!rain.leaving){const lane=b.landing*9-.5;polygon([project(lane/9,.55),project((lane+1)/9,.55),project((lane+1)/9,1),project(lane/9,1)],'#a9f2ff18');}
+ for(const b of rain.balls){const progress=b.direction===1?b.depth:1-b.depth,q=Math.min(1,progress/.78),height=progress<.78?13+110*4*q*(1-q):13+28*Math.sin((progress-.78)/.22*Math.PI/2),p=project(rainBallX(b),Math.max(0,Math.min(1,b.depth)),height);ctx.beginPath();ctx.arc(p.x,p.y,12*p.scale,0,Math.PI*2);ctx.fillStyle=b.direction===1?'#a9f2ff':'#ffdb84';ctx.fill();}
+ if(rain.balls.some(b=>b.direction===1&&b.depth>=.8&&b.depth<=1.12)){ctx.fillStyle='#a9f2ff';ctx.font='bold 24px system-ui';ctx.textAlign='center';ctx.fillText(hitArrow()+' REBATA',400,isTopSide()?115:870);}
+ ctx.fillStyle='#ffdb84';ctx.font='bold 22px system-ui';ctx.textAlign='center';ctx.fillText(rain.leaving?'Auxiliares saindo…':'CHUVA · '+Math.max(0,5-rain.time).toFixed(1)+'s · Você '+rain.ownSaved+'/'+rain.ownTotal+' | Rivais '+rain.rivalSaved+'/'+rain.rivalTotal,400,nearRainLabelY());
+}
+function nearRainLabelY(){return isTopSide()?815:115;}
+document.getElementById('arena-power').addEventListener('change',renderArena);

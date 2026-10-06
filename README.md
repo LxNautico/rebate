@@ -69,3 +69,5 @@ Escolha Copa Mundial e seu país para disputar grupos, quartas, semifinal e fina
 ### Modalidade Arena
 
 Escolha Clássico ou Arena na preparação. Na Arena, cinco devoluções carregam o golpe especial de velocidade; ative com Espaço ou pelo botão no celular e rebata. Rankings são separados. Veja [as regras da Arena](docs/ARENA.md).
+
+A Arena também oferece **Chuva de bolas**: cinco segundos de disputa com dois auxiliares do adversário. Bolas azuis voltam para você; melhor proporção de devoluções ganha um ponto. Escolha o especial no painel de golpes.

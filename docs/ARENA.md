@@ -11,3 +11,15 @@ Rankings e recordes separam Clássico e Arena, preservando resultados antigos no
 Validação: `node tests/arena.cjs`. Os testes usam interface simulada; conferir aparência e controles no computador e celular.
 
 No celular, o botão especial fica imediatamente abaixo dos controles de golpe, dentro do mesmo painel. As barras compactas aparecem depois do botão, antes do ranking.
+
+## Chuva de bolas
+
+Escolha Chuva de bolas no painel, carregue 100 de energia, ative o botão amarelo ou Espaço e acerte uma devolução. A escolha fica travada enquanto o golpe estiver preparado. O especial de velocidade continua disponível; nesta versão o adversário usa apenas velocidade.
+
+A troca normal é suspensa durante a disputa de cinco segundos. Várias bolas amarelas seguem ao rival. Dois personagens auxiliares entram correndo e defendem junto com ele; as bolas devolvidas para você são azuis. Use posicionamento e golpes normais, incluindo destino e curva. Cada golpe devolve uma bola; não há defesa automática. As faixas azuis mostram os destinos das recepções.
+
+Ao final, bolas ainda em trânsito são descartadas sem contar como erro. Compara-se a proporção de bolas defendidas sobre oportunidades concluídas de cada lado. Empate favorece quem ativou (você). O resultado vale um único ponto normal, podendo encerrar set ou partida. Os auxiliares saem em uma animação de 0,6 segundo antes da contagem do ponto; não há novas bolas nesse intervalo.
+
+A energia é consumida ao começar; a Chuva não recarrega energia durante si mesma. Devoluções contam para estatísticas e desafios da Arena. Pausar congela o cronômetro; reiniciar ou desistir remove as bolas e auxiliares. Funciona nos dois lados da mesa, em partida, torneio e Copa.
+
+Teste adicional: `node tests/rain.cjs` cobre ativação, auxiliares, devoluções, ponto único, empate, pausa, reinício, desistência, lados e simulação a 30/60/120 FPS. Conferir aparência e dificuldade no celular.

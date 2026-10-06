@@ -170,3 +170,5 @@ body.tour-active .setup-panel{padding-bottom:280px}
 #arena-controls progress{height:10px}
 #arena-hint{margin:0;font-size:11px;line-height:1.35}
 #arena-special{min-height:44px;padding:8px;touch-action:manipulation}
+
+#arena-controls #arena-power-choice{grid-column:1 / -1;display:flex;align-items:center;gap:8px}#arena-power{flex:1;min-width:0;min-height:44px;border:1px solid #648574;border-radius:8px;background:#193b3e;color:#fff;font:inherit;padding:6px}
