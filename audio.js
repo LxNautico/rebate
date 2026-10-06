@@ -79,5 +79,12 @@ const gameAudio = (() => {
   document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
   document.querySelectorAll('[data-sound-test]').forEach(button => button.addEventListener('click', () => { unlock(); if (!enabled) return; if (context && context.state === 'suspended') context.resume().then(() => play(button.dataset.soundTest)).catch(() => {}); else play(button.dataset.soundTest); }));
   refresh();
-  return { unlock, play, stop };
+  function note(index,delay=0,duration=.22){
+    if(!enabled||!context||context.state!=='running')return;
+    const frequencies=[261.63,293.66,329.63,349.23,392,440,493.88,523.25,587.33];
+    if(!frequencies[index])return;
+    try{const oscillator=context.createOscillator(),gain=context.createGain(),time=context.currentTime+delay;oscillator.type='triangle';oscillator.frequency.setValueAtTime(frequencies[index],time);gain.gain.setValueAtTime(.0001,time);gain.gain.exponentialRampToValueAtTime(.055,time+.01);gain.gain.exponentialRampToValueAtTime(.0001,time+duration);oscillator.connect(gain);gain.connect(context.destination);active.add(oscillator);oscillator.onended=()=>{active.delete(oscillator);oscillator.disconnect();gain.disconnect();};oscillator.start(time);oscillator.stop(time+duration+.01);}catch{}
+  }
+  function music(notes,elapsed=0){for(let beat=Math.ceil(elapsed/.32);beat*.32<5;beat++)note(notes[beat%notes.length],beat*.32-elapsed,.26);}
+  return { unlock, play, stop, note, music };
 })();

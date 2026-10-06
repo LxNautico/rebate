@@ -85,3 +85,5 @@ Os finais individuais agora incluem pequenas cenas ilustradas e animadas junto d
 ### Atributos e evolução
 
 Os atletas têm Força, Agilidade e Técnica com efeitos reais e barras na quadra. No celular, o toque indica para onde correr. Partidas concluídas concedem XP salvo por personagem; aumentos entram na próxima partida. Veja [atributos e treinamento](docs/ATRIBUTOS.md).
+
+A preparação oferece **Arena musical**: nove notas nos quiques e três melodias originais que liberam uma dança conjunta de cinco segundos depois do ponto. Uma dança por partida, com Pular. Veja [as regras musicais](docs/ARENA-MUSICAL.md).

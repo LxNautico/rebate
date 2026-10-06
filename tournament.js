@@ -42,9 +42,9 @@ function prepareTournament(){
   const selected=document.getElementById('player-character').value;
   const rivals=characters.filter(c=>c.id!==selected).map(c=>c.id);
   for(let i=rivals.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[rivals[i],rivals[j]]=[rivals[j],rivals[i]];}
-  tournament={playStyle:selectedPlayStyle(),rivals:rivals.slice(0,3),round:0,character:selected,uniform:document.getElementById('player-uniform').value,mode:document.getElementById('match-mode').value,difficulty:document.getElementById('difficulty').value,side:document.getElementById('table-side').value};
+  tournament={musical:document.getElementById('arena-musical').checked,playStyle:selectedPlayStyle(),rivals:rivals.slice(0,3),round:0,character:selected,uniform:document.getElementById('player-uniform').value,mode:document.getElementById('match-mode').value,difficulty:document.getElementById('difficulty').value,side:document.getElementById('table-side').value};
  }
- document.getElementById('play-style').value=tournament.playStyle||'classic';document.getElementById('table-side').value=tournament.side==='top'?'top':'bottom';document.getElementById('player-character').value=tournament.character;
+ document.getElementById('arena-musical').checked=tournament.musical===true;document.getElementById('play-style').value=tournament.playStyle||'classic';document.getElementById('table-side').value=tournament.side==='top'?'top':'bottom';document.getElementById('player-character').value=tournament.character;
  document.getElementById('player-uniform').value=tournament.uniform;
  document.getElementById('match-mode').value=tournament.mode;
  document.getElementById('difficulty').value=tournament.difficulty;
@@ -81,6 +81,6 @@ document.getElementById('leave-tournament').addEventListener('click',()=>{tourna
 document.getElementById('resume-tournament').addEventListener('click',()=>{
  if(!validTournament(savedTournament))return;
  worldCup=null;renderWorldCup();tournament=JSON.parse(JSON.stringify(savedTournament));document.getElementById('competition').value='tournament';
- document.getElementById('play-style').value=tournament.playStyle||'classic';document.getElementById('table-side').value=tournament.side==='top'?'top':'bottom';document.getElementById('player-character').value=tournament.character;prepareTournament();updateCharacterPreviews();start();
+ document.getElementById('arena-musical').checked=tournament.musical===true;document.getElementById('play-style').value=tournament.playStyle||'classic';document.getElementById('table-side').value=tournament.side==='top'?'top':'bottom';document.getElementById('player-character').value=tournament.character;prepareTournament();updateCharacterPreviews();start();
 });
 document.getElementById('new-tournament').addEventListener('click',()=>{tournament=null;saveTournament();document.getElementById('competition').value='tournament';updateCompetitionChoice();renderTournament();});

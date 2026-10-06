@@ -72,9 +72,9 @@ function renderSavedWorldCup(){const box=document.getElementById('saved-world-cu
 function prepareWorldCup(){
  if(document.getElementById('competition').value!=='worldcup'){worldCup=null;renderWorldCup();return;}
  if(worldCup&&worldCup.status!=='active')worldCup=null;
- if(!worldCup)worldCup=createWorldCup({playStyle:selectedPlayStyle(),country:document.getElementById('cup-country').value,character:document.getElementById('player-character').value,uniform:document.getElementById('player-uniform').value,opponentUniform:document.getElementById('opponent-uniform').value,mode:document.getElementById('match-mode').value,difficulty:document.getElementById('difficulty').value,side:document.getElementById('table-side').value},characters.map(c=>c.id));
+ if(!worldCup)worldCup=createWorldCup({musical:document.getElementById('arena-musical').checked,playStyle:selectedPlayStyle(),country:document.getElementById('cup-country').value,character:document.getElementById('player-character').value,uniform:document.getElementById('player-uniform').value,opponentUniform:document.getElementById('opponent-uniform').value,mode:document.getElementById('match-mode').value,difficulty:document.getElementById('difficulty').value,side:document.getElementById('table-side').value},characters.map(c=>c.id));
  for(const [id,value] of [['play-style',worldCup.playStyle||'classic'],['player-character',worldCup.character],['player-uniform',worldCup.uniform],['opponent-uniform',worldCup.opponentUniform||'red'],['match-mode',worldCup.mode],['difficulty',worldCup.difficulty],['table-side',worldCup.side||'bottom'],['cup-country',worldCup.country],['opponent-character',worldCup.roster[cupOpponent(worldCup)] ]])document.getElementById(id).value=value;
- saveWorldCup();renderWorldCup();
+ document.getElementById('arena-musical').checked=worldCup.musical===true;saveWorldCup();renderWorldCup();
 }
 function renderWorldCup(){
  renderCourtCountries();

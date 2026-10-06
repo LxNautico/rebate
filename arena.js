@@ -34,12 +34,12 @@ function renderArena(){
  const mode=document.getElementById('arena-power').value;
  document.getElementById('arena-power-info').textContent=mode==='signature'?(characterPowers[playerCharacter]?.description||'Especial próprio do personagem escolhido.')+' O rival também usa seu próprio poder.':'';
  const button=document.getElementById('arena-special');document.getElementById('arena-power').disabled=!!arenaRain||arenaArmed;
- button.disabled=!!arenaRain||arenaEnergy<100||state!=='playing'||serving||pointDelay>0;
+ button.disabled=!!musicalDance||!!arenaRain||arenaEnergy<100||state!=='playing'||serving||pointDelay>0;
  button.textContent=arenaRain?'Bolas azuis voltam para você. Defenda! Uma disputa vale um ponto.':arenaArmed?'Especial preparado · cancelar':(document.getElementById('arena-power').value==='rain'?'Chuva de bolas · Espaço':mode==='signature'?(characterPowers[playerCharacter]?.name||'Especial do personagem')+' · Espaço':'Golpe especial · Espaço');button.setAttribute('aria-pressed',String(arenaArmed));
  document.getElementById('arena-hint').textContent=arenaRain?'Bolas azuis voltam para você. Defenda! Uma disputa vale um ponto.':arenaArmed?'Rebata no momento certo para usar o especial.':arenaEnergy===100?'Energia cheia! Ative o especial durante a troca de bola.':(document.getElementById('arena-power').value==='rain'?'Cinco devoluções carregam a Chuva: disputa de 5s, com dois auxiliares. Melhor proporção de defesas ganha um ponto; empate favorece você.':mode==='signature'?'Cinco devoluções carregam o poder do seu personagem. Ative e rebata para usá-lo.':'Cada devolução carrega 20 de energia. O especial acelera a bola em 35%.');
 }
 function resetArena(){arenaRecovery.player=arenaRecovery.opponent=0;arenaRain=null;playStyle=selectedPlayStyle();arenaEnergy=rivalEnergy=0;arenaArmed=false;renderArena();}
-function armArena(){if(arenaRain||playStyle!=='arena'||state!=='playing'||pointDelay>0||serving||arenaEnergy<100)return;arenaArmed=!arenaArmed;renderArena();}
+function armArena(){if(musicalDance||arenaRain||playStyle!=='arena'||state!=='playing'||pointDelay>0||serving||arenaEnergy<100)return;arenaArmed=!arenaArmed;renderArena();}
 function arenaReturn(own){if(playStyle!=='arena')return;if(own)arenaEnergy=Math.min(100,arenaEnergy+20);else rivalEnergy=Math.min(100,rivalEnergy+20);renderArena();}
 function arenaShot(own,isServe=false){
  ball.special=false;ball.impact=false;ball.power=null;ball.heightFactor=1;ball.curveShape=null;ball.specialName='';
@@ -93,7 +93,7 @@ function advanceArenaRain(dt){
  const remove=new Set();
  for(const b of rain.balls){
   b.depth+=b.direction*rain.settings.speed*athleteFactor(b.direction===-1?'player':'opponent','force')*dt;
-  if(!b.bounced&&(b.direction===1?b.depth:1-b.depth)>=.78){b.bounced=true;gameAudio.play('bounce');if(b.landing<0||b.landing>1){if(b.direction===-1){rain.ownTotal++;matchStats.currentSequence=0;}else rain.rivalTotal++;remove.add(b);continue;}}
+  if(!b.bounced&&(b.direction===1?b.depth:1-b.depth)>=.78){b.bounced=true;gameAudio.play('bounce');if(b.landing<0||b.landing>1){if(b.direction===-1){rain.ownTotal++;matchStats.currentSequence=0;}else rain.rivalTotal++;remove.add(b);continue;}musicalBounce(b.landing);}
   if(b.direction===-1&&b.depth<=0){
    rain.rivalTotal++;const defender=defenders.reduce((best,d)=>Math.abs(laneX(d.lane)-b.landing)<Math.abs(laneX(best.lane)-b.landing)?d:best);
    if(Math.abs(laneX(defender.lane)-b.landing)<=.085){rain.rivalSaved++;b.direction=1;b.depth=0;b.origin=laneX(defender.lane);b.landing=laneX(Math.max(0,Math.min(8,player+(b.serial%3-1)*1.1)));b.curve=0;b.bounced=false;gameAudio.play('hit');if(defender.main)opponentAnimation=.38;else defender.hit=.38;}else remove.add(b);
