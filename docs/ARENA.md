@@ -6,7 +6,7 @@ Na Arena, cada devolução carrega 20 de energia, até 100. A energia permanece 
 
 O adversário também carrega energia e usa o especial automaticamente ao completar cinco devoluções. Posicionamento, direção e curva continuam necessários. A habilidade não rebate automaticamente.
 
-Rankings e recordes separam Clássico e Arena, preservando resultados antigos no Clássico. Esta primeira versão contém o especial de velocidade; poderes por personagem ficam para uma próxima etapa.
+Rankings e recordes separam Clássico e Arena, preservando resultados antigos no Clássico. Esta primeira versão contém o especial de velocidade; a opção Especial do personagem oferece poderes individuais.
 
 Validação: `node tests/arena.cjs`. Os testes usam interface simulada; conferir aparência e controles no computador e celular.
 
@@ -14,7 +14,7 @@ No celular, o botão especial fica imediatamente abaixo dos controles de golpe, 
 
 ## Chuva de bolas
 
-Escolha Chuva de bolas no painel, carregue 100 de energia, ative o botão amarelo ou Espaço e acerte uma devolução. A escolha fica travada enquanto o golpe estiver preparado. O especial de velocidade continua disponível; nesta versão o adversário usa apenas velocidade.
+Escolha Chuva de bolas no painel, carregue 100 de energia, ative o botão amarelo ou Espaço e acerte uma devolução. A escolha fica travada enquanto o golpe estiver preparado. O especial de velocidade continua disponível; na escolha Chuva de bolas, o adversário usa velocidade; na escolha Especial do personagem, também usa seu poder individual.
 
 A troca normal é suspensa durante a disputa de cinco segundos. Várias bolas amarelas seguem ao rival. Dois personagens auxiliares entram correndo e defendem junto com ele; as bolas devolvidas para você são azuis. Use posicionamento e golpes normais, incluindo destino e curva. Cada golpe devolve uma bola; não há defesa automática. As faixas azuis mostram os destinos das recepções.
 
@@ -27,3 +27,22 @@ Teste adicional: `node tests/rain.cjs` cobre ativação, auxiliares, devoluçõe
 ## Ritmo da Chuva por dificuldade
 
 Fácil: novas bolas a cada 0,55 s, limite de cinco em circulação e velocidade 0,85. Médio: 0,45 s, seis bolas e velocidade 1. Difícil: 0,40 s, sete bolas e velocidade 1,10. A disputa permanece com cinco segundos em todos os níveis. Uma bola sua enviada para fora conta como erro seu; perder uma devolução interrompe a sequência dos desafios.
+
+## Especiais dos personagens
+
+Escolha Especial do personagem no painel. Cinco devoluções carregam 100 de energia; ativar prepara a próxima devolução. O rival também usa seu próprio especial nessa opção. Saques não recebem poderes. Todos preservam o destino escolhido e precisam ser defendidos com posicionamento e tempo de golpe.
+
+| Personagem | Especial | Efeito |
+| --- | --- | --- |
+| Alex | Linha perfeita | 18% mais rápido, remove a curva |
+| Rafa | Bola de fogo | 45% mais rápido, rastro laranja com chama |
+| Lia | Contra-curva | Inverte a curva, sem mudar o destino |
+| Maya | Balão de resistência | Velocidade 22% menor, arco 55% mais alto; recupera 20 de energia |
+| Léo | Zigue-zague | Faz duas curvas durante o voo |
+| Nina | Corte tardio | Curva concentrada perto do quique, 12% mais rápido |
+| Caio | Impacto | 12% mais rápido; ao ser defendido, desacelera a devolução em 15% e mostra desequilíbrio por 0,5 s |
+| Íris | Arco técnico | Curva controlada, arco 25% mais alto e velocidade 5% maior |
+
+As velocidades do rival também consideram seu estilo habitual. O impacto permite devolver normalmente; não bloqueia os controles e não elimina automaticamente o adversário. A animação respeita movimento reduzido. Recuperação é reiniciada no próximo saque. Troféus, histórias e Clássico continuam com suas regras.
+
+Validação: `node tests/character-powers.cjs` cobre todos os personagens nos dois lados, poderes do rival, consumo de energia, destino de quique, trajetórias finitas, defesa do impacto e proteção do Clássico. Conferir dificuldade e clareza dos efeitos no celular antes de considerar estes valores definitivos.

@@ -1,29 +1,59 @@
 let playStyle='classic',arenaEnergy=0,rivalEnergy=0,arenaArmed=false;
 let arenaRain=null;
+const arenaRecovery={player:0,opponent:0};
+const characterPowers={
+ alex:{name:'Linha perfeita',description:'Golpe reto 18% mais rápido, sem curva.',color:'#fff3c9'},
+ rafa:{name:'Bola de fogo',description:'Ataque 45% mais rápido, com rastro de fogo.',color:'#ff6536'},
+ lia:{name:'Contra-curva',description:'Inverte a curva escolhida, mantendo o destino.',color:'#cf9eff'},
+ maya:{name:'Balão de resistência',description:'Bola lenta e alta; recupera 20 de energia.',color:'#9bffc8'},
+ leo:{name:'Zigue-zague',description:'Duas curvas durante o voo, mantendo o destino.',color:'#ffdf79'},
+ nina:{name:'Corte tardio',description:'Curva concentrada perto do quique, 12% mais veloz.',color:'#ff9cda'},
+ caio:{name:'Impacto',description:'Desequilibra ao ser defendido: a devolução perde 15% de velocidade.',color:'#ffb65c'},
+ iris:{name:'Arco técnico',description:'Bola alta com curva controlada e 5% mais velocidade.',color:'#a1edff'}
+};
+function applyCharacterPower(id,own){
+ const power=characterPowers[id];ball.specialName=power.name;ball.specialColor=power.color;ball.power=id;const direction=ball.curve||((own?ball.from:ball.to)<.5?-1:1);
+ switch(id){
+ case 'alex':ball.speed*=1.18;ball.curve=0;break;
+ case 'rafa':ball.speed*=1.45;break;
+ case 'lia':ball.curve=-Math.sign(direction)*.95;break;
+ case 'maya':ball.speed*=.78;ball.heightFactor=1.55;if(own)arenaEnergy=20;else rivalEnergy=20;break;
+ case 'leo':ball.curve=Math.sign(direction)*.9;ball.curveShape='double';break;
+ case 'nina':ball.speed*=1.12;ball.curve=Math.sign(direction)*.95;ball.curveShape='late';break;
+ case 'caio':ball.speed*=1.12;ball.impact=true;break;
+ case 'iris':ball.speed*=1.05;ball.heightFactor=1.25;ball.curve=Math.sign(direction)*.65;break;
+ }
+}
+function arenaImpactReceived(own){if(playStyle!=='arena'||!ball.impact)return false;arenaRecovery[own?'player':'opponent']=.5;ball.impact=false;return true;}
+function advanceArenaRecovery(dt){for(const side of ['player','opponent'])arenaRecovery[side]=Math.max(0,arenaRecovery[side]-dt);}
 const selectedPlayStyle=()=>document.getElementById('play-style').value==='arena'?'arena':'classic';
 function renderArena(){
  const active=playStyle==='arena';document.getElementById('arena-controls').hidden=!active;
  document.getElementById('arena-energy').value=arenaEnergy;document.getElementById('rival-energy').value=rivalEnergy;
  document.getElementById('arena-energy-text').textContent=arenaEnergy+'/100';
+ const mode=document.getElementById('arena-power').value;
+ document.getElementById('arena-power-info').textContent=mode==='signature'?(characterPowers[playerCharacter]?.description||'Especial próprio do personagem escolhido.')+' O rival também usa seu próprio poder.':'';
  const button=document.getElementById('arena-special');document.getElementById('arena-power').disabled=!!arenaRain||arenaArmed;
  button.disabled=!!arenaRain||arenaEnergy<100||state!=='playing'||serving||pointDelay>0;
- button.textContent=arenaRain?'Bolas azuis voltam para você. Defenda! Uma disputa vale um ponto.':arenaArmed?'Especial preparado · cancelar':(document.getElementById('arena-power').value==='rain'?'Chuva de bolas · Espaço':'Golpe especial · Espaço');button.setAttribute('aria-pressed',String(arenaArmed));
- document.getElementById('arena-hint').textContent=arenaRain?'Bolas azuis voltam para você. Defenda! Uma disputa vale um ponto.':arenaArmed?'Rebata no momento certo para usar o especial.':arenaEnergy===100?'Energia cheia! Ative o especial durante a troca de bola.':(document.getElementById('arena-power').value==='rain'?'Cinco devoluções carregam a Chuva: disputa de 5s, com dois auxiliares. Melhor proporção de defesas ganha um ponto; empate favorece você.':'Cada devolução carrega 20 de energia. O especial acelera a bola em 35%.');
+ button.textContent=arenaRain?'Bolas azuis voltam para você. Defenda! Uma disputa vale um ponto.':arenaArmed?'Especial preparado · cancelar':(document.getElementById('arena-power').value==='rain'?'Chuva de bolas · Espaço':mode==='signature'?(characterPowers[playerCharacter]?.name||'Especial do personagem')+' · Espaço':'Golpe especial · Espaço');button.setAttribute('aria-pressed',String(arenaArmed));
+ document.getElementById('arena-hint').textContent=arenaRain?'Bolas azuis voltam para você. Defenda! Uma disputa vale um ponto.':arenaArmed?'Rebata no momento certo para usar o especial.':arenaEnergy===100?'Energia cheia! Ative o especial durante a troca de bola.':(document.getElementById('arena-power').value==='rain'?'Cinco devoluções carregam a Chuva: disputa de 5s, com dois auxiliares. Melhor proporção de defesas ganha um ponto; empate favorece você.':mode==='signature'?'Cinco devoluções carregam o poder do seu personagem. Ative e rebata para usá-lo.':'Cada devolução carrega 20 de energia. O especial acelera a bola em 35%.');
 }
-function resetArena(){arenaRain=null;playStyle=selectedPlayStyle();arenaEnergy=rivalEnergy=0;arenaArmed=false;renderArena();}
+function resetArena(){arenaRecovery.player=arenaRecovery.opponent=0;arenaRain=null;playStyle=selectedPlayStyle();arenaEnergy=rivalEnergy=0;arenaArmed=false;renderArena();}
 function armArena(){if(arenaRain||playStyle!=='arena'||state!=='playing'||pointDelay>0||serving||arenaEnergy<100)return;arenaArmed=!arenaArmed;renderArena();}
 function arenaReturn(own){if(playStyle!=='arena')return;if(own)arenaEnergy=Math.min(100,arenaEnergy+20);else rivalEnergy=Math.min(100,rivalEnergy+20);renderArena();}
 function arenaShot(own,isServe=false){
- ball.special=false;
+ ball.special=false;ball.impact=false;ball.power=null;ball.heightFactor=1;ball.curveShape=null;ball.specialName='';
  if(playStyle!=='arena'||isServe)return;
  if(own?arenaArmed&&arenaEnergy===100:rivalEnergy===100){
   if(own&&document.getElementById('arena-power').value==='rain'){arenaEnergy=0;arenaArmed=false;startArenaRain();renderArena();return;}
-  ball.special=true;ball.speed=(own?1:(ball.speed||1))*1.35;
+  ball.special=true;ball.speed=own?1:(ball.speed||1);
+  const signature=document.getElementById('arena-power').value==='signature';
   if(own){arenaEnergy=0;arenaArmed=false;}else rivalEnergy=0;
-  ui.feedback.textContent=own?'Seu golpe especial de velocidade!':'Especial do adversário! Prepare a defesa.';
+  if(signature)applyCharacterPower(own?playerCharacter:opponentCharacter,own);else{ball.speed*=1.35;ball.specialName='Golpe de velocidade';ball.specialColor='#ff8d42';}
+  ui.feedback.textContent=(own?'Seu especial: ':'Especial do adversário: ')+ball.specialName+'!';
  }renderArena();
 }
-function drawArenaTrail(p){if(!ball.special)return;ctx.save();ctx.strokeStyle='#ff8d42';ctx.lineWidth=6*p.scale;ctx.beginPath();ctx.moveTo(p.x,p.y);const previous=Math.max(0,shotProgress()-.08),depth=ball.direction===1?previous:1-previous;const q=project(shotX(previous),depth,ballHeight());ctx.lineTo(q.x,q.y);ctx.stroke();ctx.restore();}
+function drawArenaTrail(p){if(!ball.special)return;ctx.save();ctx.strokeStyle=ball.specialColor||'#ff8d42';ctx.lineWidth=6*p.scale;ctx.beginPath();ctx.moveTo(p.x,p.y);const previous=Math.max(0,shotProgress()-.08),depth=ball.direction===1?previous:1-previous;const q=project(shotX(previous),depth,ballHeight());ctx.lineTo(q.x,q.y);ctx.stroke();ctx.restore();}
 document.getElementById('arena-special').addEventListener('click',armArena);
 document.getElementById('play-style').addEventListener('change',()=>{playStyle=selectedPlayStyle();loadBest();updatePoints();renderRanking();});
 

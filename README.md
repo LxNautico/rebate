@@ -77,3 +77,5 @@ A Arena também oferece **Chuva de bolas**: cinco segundos de disputa com dois a
 A página abre na apresentação automática dos oito personagens. Clique em Jogar para abrir as escolhas; fechar a seleção antes da partida retorna à apresentação. O botão Jogar permanece disponível. Não há som automático nem alteração do progresso. A preferência por movimento reduzido mostra uma cena estática.
 
 As [biografias e finais propostos](docs/HISTORIAS-PERSONAGENS.md) foram aprovados: cards aparecem após vitórias de sets e partidas, e finais narrados acompanham os troféus. A galeria na seleção permite reler; Continuar e Pular liberam o jogo. Teste: `node tests/presentation.cjs`.
+
+A opção **Especial do personagem** na Arena oferece oito poderes próprios. O painel informa o efeito; o rival também usa seu poder. Velocidade e Chuva de bolas permanecem disponíveis. Valores iniciais ainda precisam de avaliação de jogabilidade no celular.
