@@ -12,7 +12,7 @@ function renderRewards(){
  if(!unlocked[selectedCourt])selectedCourt='classic';
  select.replaceChildren();
  for(const [id,theme] of Object.entries(courtThemes)){const option=document.createElement('option');option.value=id;option.textContent=theme.name+(unlocked[id]?'':' · Bloqueada');option.disabled=!unlocked[id];select.append(option);}
- select.value=selectedCourt;
+ select.value=selectedCourt;renderCourtUnlockInfo();
  const list=document.getElementById('reward-list');list.replaceChildren();
  const rows=[['blue','Campeão versátil',Math.min(2,new Set(tournamentTrophies.map(t=>t.character)).size)+'/2 personagens campeões'],['purple','Troca de mestre',Math.min(10,rewardProgress.sequence)+'/10 devoluções na mesma troca'],['clay','Novo nível',rewardProgress.mediumWin?'Vitória no médio conquistada':'Vença uma partida no médio']];
  for(const [id,title,progress] of rows){const li=document.createElement('li');li.textContent=(unlocked[id]?'✓ ':'')+title+' · '+progress+' · '+courtThemes[id].name;list.append(li);}
@@ -35,4 +35,14 @@ document.getElementById('court-theme').addEventListener('change',e=>{
  if(state==='playing'||state==='paused')return;
  selectedCourt=unlockedCourts()[e.target.value]?e.target.value:'classic';
  try{localStorage.setItem('ping-pong-court-v1',selectedCourt);}catch{}
+});
+
+function renderCourtUnlockInfo(){
+ const unlocked=unlockedCourts(),champions=Math.min(2,new Set(tournamentTrophies.map(t=>t.character)).size);
+ const descriptions={classic:'Disponível desde o início.',blue:'Conquiste títulos de torneio ou Copa com dois personagens diferentes. Progresso: '+champions+'/2 personagens campeões.',purple:'Faça dez devoluções na mesma troca de bola, sem encerrar o ponto. Progresso: '+Math.min(10,rewardProgress.sequence)+'/10.',clay:'Vença uma partida na dificuldade Médio. '+(rewardProgress.mediumWin?'Vitória conquistada.':'Vitória ainda não conquistada.')};
+ const list=document.getElementById('court-unlock-list');list.replaceChildren();
+ for(const [id,theme] of Object.entries(courtThemes)){const row=document.createElement('div'),title=document.createElement('strong'),description=document.createElement('p');row.className='court-unlock-row';title.textContent=theme.name+' · '+(unlocked[id]?'Disponível':'Bloqueada');description.textContent=descriptions[id];row.append(title,description);list.append(row);}
+}
+document.getElementById('court-info-toggle').addEventListener('click',()=>{
+ const info=document.getElementById('court-unlock-info');info.hidden=!info.hidden;document.getElementById('court-info-toggle').setAttribute('aria-expanded',String(!info.hidden));if(!info.hidden)renderCourtUnlockInfo();
 });
