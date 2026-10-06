@@ -66,7 +66,7 @@ function startArenaRain(){
  ui.feedback.textContent='Chuva de bolas! Defenda durante cinco segundos.';
 }
 function spawnRainBall(lane,origin){
- const rain=arenaRain;rain.balls.push({depth:1,origin,landing:laneX(lane),direction:-1,curve:effect*.07,serial:rain.serial++,bounced:false});
+ const rain=arenaRain;rain.balls.push({depth:1,origin,landing:laneX(lane),direction:-1,curve:effect*.07*athleteFactor('player','technique'),serial:rain.serial++,bounced:false});
 }
 function rainBallX(b){const t=Math.min(1,(b.direction===1?b.depth:1-b.depth)/.78);return b.origin+(b.landing-b.origin)*t+b.curve*Math.sin(Math.PI*t);}
 function finishArenaRain(){
@@ -78,7 +78,7 @@ function advanceArenaRain(dt){
  const rain=arenaRain;if(!rain)return;
  rain.time+=dt;
  const move=(held.has('arrowright')||held.has('d')?1:0)-(held.has('arrowleft')||held.has('a')?1:0);
- if(!held.has(hitKey()))chooseLane(player+move*7*dt);
+ advancePlayerMovement(dt);
  playerAnimation=Math.max(0,playerAnimation-dt);opponentAnimation=Math.max(0,opponentAnimation-dt);swing=Math.max(0,swing-dt);
  for(const helper of rain.helpers){helper.phase+=dt*15;helper.hit=Math.max(0,helper.hit-dt);}
  if(rain.time>=5){rain.leaving=true;rain.balls=[];swing=0;if(rain.time>=5.6)finishArenaRain();return;}
@@ -87,20 +87,20 @@ function advanceArenaRain(dt){
  const defenders=[{lane:opponent,main:true},...rain.helpers];
  for(const defender of defenders){
   const incoming=rain.balls.filter(b=>b.direction===-1).sort((a,b)=>Math.abs(a.landing-laneX(defender.lane))-Math.abs(b.landing-laneX(defender.lane)))[0];
-  if(incoming){const desired=Math.max(0,Math.min(8,incoming.landing*9-.5)),delta=desired-defender.lane;defender.lane+=Math.sign(delta)*Math.min(Math.abs(delta),difficulties[difficulty].tracking*dt);}
+  if(incoming){const desired=Math.max(0,Math.min(8,incoming.landing*9-.5)),delta=desired-defender.lane;defender.lane+=Math.sign(delta)*Math.min(Math.abs(delta),difficulties[difficulty].tracking*athleteFactor('opponent','agility')*dt);}
  }
  opponent=defenders[0].lane;
  const remove=new Set();
  for(const b of rain.balls){
-  b.depth+=b.direction*rain.settings.speed*dt;
+  b.depth+=b.direction*rain.settings.speed*athleteFactor(b.direction===-1?'player':'opponent','force')*dt;
   if(!b.bounced&&(b.direction===1?b.depth:1-b.depth)>=.78){b.bounced=true;gameAudio.play('bounce');if(b.landing<0||b.landing>1){if(b.direction===-1){rain.ownTotal++;matchStats.currentSequence=0;}else rain.rivalTotal++;remove.add(b);continue;}}
   if(b.direction===-1&&b.depth<=0){
    rain.rivalTotal++;const defender=defenders.reduce((best,d)=>Math.abs(laneX(d.lane)-b.landing)<Math.abs(laneX(best.lane)-b.landing)?d:best);
    if(Math.abs(laneX(defender.lane)-b.landing)<=.085){rain.rivalSaved++;b.direction=1;b.depth=0;b.origin=laneX(defender.lane);b.landing=laneX(Math.max(0,Math.min(8,player+(b.serial%3-1)*1.1)));b.curve=0;b.bounced=false;gameAudio.play('hit');if(defender.main)opponentAnimation=.38;else defender.hit=.38;}else remove.add(b);
   }
  }
- const hittable=rain.balls.filter(b=>!remove.has(b)&&b.direction===1&&b.depth>=.8&&b.depth<=1.12&&Math.abs(laneX(player)-rainBallX(b))<=.075).sort((a,b)=>b.depth-a.depth);
- if(swing>0&&hittable.length){const b=hittable[0];rain.ownTotal++;rain.ownSaved++;score++;matchStats.currentSequence++;matchStats.longestSequence=Math.max(matchStats.longestSequence,matchStats.currentSequence);ui.score.textContent=score;updateChallenges();gameAudio.play('hit');playerAnimation=.38;playerPose=effect<0?1:2;swing=0;b.depth=1;b.direction=-1;b.origin=laneX(player);b.landing=gestureAim===null?laneX(target===null?player:target):laneX(gestureAim);gestureAim=null;b.curve=effect*.07;b.bounced=false;}
+ const hittable=rain.balls.filter(b=>!remove.has(b)&&b.direction===1&&b.depth>=.8&&b.depth<=1.12&&Math.abs(laneX(player)-rainBallX(b))<=athleteTolerance('player')).sort((a,b)=>b.depth-a.depth);
+ if(swing>0&&hittable.length){const b=hittable[0];rain.ownTotal++;rain.ownSaved++;score++;matchStats.currentSequence++;matchStats.longestSequence=Math.max(matchStats.longestSequence,matchStats.currentSequence);ui.score.textContent=score;updateChallenges();trainReturn(effect,{from:b.origin,to:b.landing});gameAudio.play('hit');playerAnimation=.38;playerPose=effect<0?1:2;swing=0;b.depth=1;b.direction=-1;b.origin=laneX(player);b.landing=gestureAim===null?laneX(target===null?player:target):laneX(gestureAim);gestureAim=null;b.curve=effect*.07*athleteFactor('player','technique');b.bounced=false;}
  for(const b of rain.balls)if(!remove.has(b)&&b.direction===1&&b.depth>1.12){rain.ownTotal++;matchStats.currentSequence=0;remove.add(b);}
  rain.balls=rain.balls.filter(b=>!remove.has(b));
  ui.feedback.textContent='Chuva · '+Math.max(0,5-rain.time).toFixed(1)+'s · Você '+rain.ownSaved+'/'+rain.ownTotal+' · Rivais '+rain.rivalSaved+'/'+rain.rivalTotal;

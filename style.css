@@ -184,3 +184,5 @@ body.tour-active .setup-panel{padding-bottom:280px}
 #champion-scene,#story-scene{width:100%;max-width:360px;height:auto;border-radius:12px;border:1px solid #62847b;margin:10px auto}#story-scene[hidden]{display:none}#champion-display{flex-wrap:wrap}
 
 #champion-display{width:100%;max-width:360px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}#champion-portrait{justify-self:end}.champion-cup{justify-self:start}#champion-scene,#champion-ending{grid-column:1 / -1}
+
+.athlete-bars{padding:7px 10px;background:#102b33;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;font-size:10px}.athlete-bars[hidden]{display:none}.athlete-bars>strong{grid-column:1 / -1;color:#ffdb84}.athlete-bars label{display:grid;gap:3px}.athlete-bars progress{width:100%;height:8px;accent-color:#d2e7a1}#athlete-training{border-top:1px solid #52746c;text-align:left;padding-top:8px;font-size:12px}#athlete-training[hidden]{display:none}#athlete-training p{font-size:12px;margin:5px 0}

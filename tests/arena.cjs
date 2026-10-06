@@ -6,7 +6,7 @@ function element(id){return elements[id]||(elements[id]={value:defaults[id]||'',
 let generated=0;
 const sandbox={console,document:{getElementById:element,querySelector:element,querySelectorAll:()=>[],createElement:()=>element('generated-'+generated++),addEventListener(){}},window:{addEventListener(){},matchMedia:()=>({matches:false})},Image:class{},HTMLButtonElement:class{},localStorage:{getItem:k=>storage[k]||null,setItem:(k,v)=>storage[k]=v,removeItem:k=>delete storage[k]},requestAnimationFrame(){},gameAudio:{unlock(){},play(){},stop(){}}};
 vm.createContext(sandbox);
-for(const file of ['sprite-masks.js','results.js','challenges.js','personalities.js','tournament.js','rewards.js','celebration-frames.js','character-motion.js','world-cup.js','table-side.js','arena.js','presentation.js','endings.js','stories.js','script.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,'..',file),'utf8'),sandbox,{filename:file});
+for(const file of ['sprite-masks.js','results.js','challenges.js','personalities.js','tournament.js','rewards.js','celebration-frames.js','character-motion.js','world-cup.js','table-side.js','arena.js','presentation.js','endings.js','stories.js','attributes.js','script.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,'..',file),'utf8'),sandbox,{filename:file});
 vm.runInContext(`
 function check(ok,label){if(!ok)throw Error(label);}
 document.getElementById('competition').value='single';document.getElementById('play-style').value='arena';start();
@@ -14,8 +14,8 @@ check(playStyle==='arena'&&!document.getElementById('arena-controls').hidden,'Ar
 for(let i=0;i<5;i++)arenaReturn(true);check(arenaEnergy===100,'five returns');
 armArena();check(!arenaArmed,'no special during serve');send();check(!ball.special&&arenaEnergy===100,'normal serve');
 armArena();check(arenaArmed,'armed');arenaReturn(true);send(1);
-check(ball.special&&ball.speed===1.35&&arenaEnergy===0&&ball.curve===1,'special consumption and curve');
-const before=ball.depth;advance(.01);check(Math.abs((before-ball.depth)-rallyBallSpeed(matchStats.currentSequence)*1.35*.01)<1e-8,'outgoing special speed');
+check(ball.special&&Math.abs(ball.speed-1.35*athleteFactor('player','force'))<1e-8&&arenaEnergy===0&&ball.curve===1,'special consumption and curve');
+const before=ball.depth;advance(.01);check(Math.abs((before-ball.depth)-rallyBallSpeed(matchStats.currentSequence)*1.35*athleteFactor('player','force')*.01)<1e-8,'outgoing special speed');
 for(let i=0;i<5;i++)arenaReturn(false);applyOpponentShot();arenaShot(false);
 check(ball.special&&rivalEnergy===0&&ball.speed>1.2,'rival special');
 arenaEnergy=100;arenaArmed=true;prepareServe();check(arenaEnergy===100&&!arenaArmed,'energy between points');
