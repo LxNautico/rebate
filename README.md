@@ -79,3 +79,5 @@ A página abre na apresentação automática dos oito personagens. Clique em Jog
 As [biografias e finais propostos](docs/HISTORIAS-PERSONAGENS.md) foram aprovados: cards aparecem após vitórias de sets e partidas, e finais narrados acompanham os troféus. A galeria na seleção permite reler; Continuar e Pular liberam o jogo. Teste: `node tests/presentation.cjs`.
 
 A opção **Especial do personagem** na Arena oferece oito poderes próprios. O painel informa o efeito; o rival também usa seu poder. Velocidade e Chuva de bolas permanecem disponíveis. Valores iniciais ainda precisam de avaliação de jogabilidade no celular.
+
+Os finais individuais agora incluem pequenas cenas ilustradas e animadas junto do troféu e na galeria, com cenários, familiares e atividades das biografias. Movimento reduzido mantém a cena estática. Validação: `node tests/endings.cjs`.

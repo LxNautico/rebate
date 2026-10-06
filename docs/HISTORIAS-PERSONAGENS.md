@@ -102,3 +102,9 @@ Os capítulos são exibidos em ordem após vitórias de sets e partidas, até os
 Teste: `node tests/stories.cjs`.
 
 A apresentação também alterna as quatro quadras e as cinco cores de uniforme, com cores diferentes para os dois atletas. Exibe inclusive quadras ainda bloqueadas como prévia; isso não as desbloqueia nem modifica as escolhas da partida.
+
+## Finais visuais implementados
+
+As oito cenas ilustradas usam os sprites do atleta e desenhos leves de cenários, familiares e objetos. Aparecem junto ao troféu e na galeria ao abrir Final. O texto completo permanece disponível. Os cenários representam as histórias; parentes são figuras ilustradas, sem novos retratos realistas. Animações repetem pequenos movimentos e respeitam a preferência de movimento reduzido com uma composição estática. Não há vídeo, áudio automático, novo resultado ou alteração das conquistas.
+
+Teste: `node tests/endings.cjs`, com oito cenas, cinco uniformes, seis momentos e movimento reduzido.

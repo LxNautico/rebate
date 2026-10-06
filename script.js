@@ -193,7 +193,7 @@ function updateGuidance(){if(arenaRain&&state==='playing'){document.getElementBy
 let frameErrorReported=false;
 function frame(time){
  const dt=lastTime===undefined?0:Math.min((time-lastTime)/1000,.05);lastTime=time;
- try{if(state==='playing'){advance(dt);advanceCharacterMotion(dt);}updateGuidance();draw();drawArenaRain();drawPresentation(dt);}
+ try{if(state==='playing'){advance(dt);advanceCharacterMotion(dt);}updateGuidance();draw();drawArenaRain();drawPresentation(dt);drawEndings(dt);}
  catch(error){if(!frameErrorReported){console.error('Falha ao desenhar o jogo; a próxima atualização será tentada.',error);frameErrorReported=true;}}
  finally{requestAnimationFrame(frame);}
 }

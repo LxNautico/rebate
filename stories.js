@@ -7,6 +7,7 @@ function showStory(id,index,automatic=false,resume=null){
  const previous=state;storyFocus=document.activeElement;held.clear();swing=0;serveWindup=0;gameAudio.stop();state='story';
  storyReturn=()=>{state=previous;if(resume)resume();};storyActive={id,index,automatic};
  const story=characterStories[id],name=characters.find(c=>c.id===id).name;
+ document.getElementById('story-scene').hidden=index!==3;endingClock=0;
  document.getElementById('story-title').textContent=name+' · '+(index===3?'Um final para celebrar':story.chapters[index].title);
  document.getElementById('story-subtitle').textContent=story.title+' · História fictícia';
  document.getElementById('story-text').textContent=index===3?story.ending:story.chapters[index].text;
@@ -21,7 +22,7 @@ function closeStory(){
  document.getElementById('story-dialog').hidden=true;storyActive=null;held.clear();const resume=storyReturn;storyReturn=null;if(resume)resume();if(storyFocus&&storyFocus.isConnected)storyFocus.focus();
 }
 function nextCharacterStory(resume=null){const index=storySeen[playerCharacter]||0;if(index>=3)return false;return showStory(playerCharacter,index,true,resume);}
-function renderChampionEnding(){
+function renderChampionEnding(){endingClock=0;
  const ending=document.getElementById('champion-ending');ending.textContent=characterStories[playerCharacter]?.ending||'';ending.hidden=!ending.textContent;
 }
 function renderStoryGallery(){
