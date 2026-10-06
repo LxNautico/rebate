@@ -40,4 +40,4 @@ document.getElementById('tour-close').addEventListener('click',closeTour);
 document.getElementById('setup-close').addEventListener('click',()=>{if(!tourBox.hidden)closeTour();document.getElementById('character-setup').hidden=true;ui.overlay.hidden=true;document.getElementById('browse-play').focus();});
 document.getElementById('browse-play').addEventListener('click',()=>{if(state==='playing')pause();openCharacterSetup();});
 document.getElementById('explore-play').addEventListener('click',()=>{if(state==='playing')pause();openCharacterSetup();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!tourBox.hidden)closeTour();else if(!document.getElementById('character-setup').hidden)document.getElementById('setup-close').click();}});
+document.addEventListener('keydown',e=>{if(e.defaultPrevented)return;if(e.key==='Escape'){if(!tourBox.hidden)closeTour();else if(!document.getElementById('character-setup').hidden)document.getElementById('setup-close').click();}});

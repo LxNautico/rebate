@@ -6,7 +6,7 @@ function element(id){return elements[id]||(elements[id]={value:defaults[id]||'',
 let generated=0;
 const sandbox={console,document:{getElementById:element,querySelector:element,querySelectorAll:()=>[],createElement:()=>element('generated-'+generated++),addEventListener(){}},window:{addEventListener(){},matchMedia:()=>({matches:false})},Image:class{},HTMLButtonElement:class{},localStorage:{getItem:k=>storage[k]||null,setItem:(k,v)=>storage[k]=v,removeItem:k=>delete storage[k]},requestAnimationFrame(){},gameAudio:{unlock(){},play(){},stop(){}}};
 vm.createContext(sandbox);
-for(const file of ['sprite-masks.js','results.js','challenges.js','personalities.js','tournament.js','rewards.js','celebration-frames.js','character-motion.js','world-cup.js','table-side.js','arena.js','presentation.js','script.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,'..',file),'utf8'),sandbox,{filename:file});
+for(const file of ['sprite-masks.js','results.js','challenges.js','personalities.js','tournament.js','rewards.js','celebration-frames.js','character-motion.js','world-cup.js','table-side.js','arena.js','presentation.js','stories.js','script.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,'..',file),'utf8'),sandbox,{filename:file});
 vm.runInContext(`
 function check(ok,label){if(!ok)throw Error(label);}
 document.getElementById('competition').value='single';document.getElementById('play-style').value='arena';start();
@@ -20,11 +20,11 @@ for(let i=0;i<5;i++)arenaReturn(false);applyOpponentShot();arenaShot(false);
 check(ball.special&&rivalEnergy===0&&ball.speed>1.2,'rival special');
 arenaEnergy=100;arenaArmed=true;prepareServe();check(arenaEnergy===100&&!arenaArmed,'energy between points');
 start();check(arenaEnergy===0&&rivalEnergy===0,'restart reset');
-playerPoints=5;opponentPoints=0;matchStats.sets=[[5,0]];end('Arena');
+playerPoints=5;opponentPoints=0;matchStats.sets=[[5,0]];end('Arena');if(storyActive)closeStory();
 check(rankingEntries.some(e=>e.playStyle==='arena'),'Arena ranking');
 document.getElementById('play-style').value='classic';start();arenaReturn(true);send();
 check(arenaEnergy===0&&!ball.special&&document.getElementById('arena-controls').hidden,'classic unchanged');
-playerPoints=5;opponentPoints=0;matchStats.sets=[[5,0]];end('Classic');
+playerPoints=5;opponentPoints=0;matchStats.sets=[[5,0]];end('Classic');if(storyActive)closeStory();
 check(rankingEntries.some(e=>e.playStyle==='classic')&&rankingEntries.some(e=>e.playStyle==='arena'),'separate ranking retention');
 check(document.getElementById('ranking-list').children.length===1,'ranking filter');
 document.getElementById('play-style').value='arena';document.getElementById('competition').value='tournament';start();

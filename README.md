@@ -76,4 +76,4 @@ A Arena também oferece **Chuva de bolas**: cinco segundos de disputa com dois a
 
 Ao fechar a seleção antes de uma partida, a quadra apresenta trocas automáticas entre os oito personagens. O botão Jogar permanece disponível. Não há som automático nem alteração do progresso. A preferência por movimento reduzido mostra uma cena estática.
 
-As [biografias e finais propostos](docs/HISTORIAS-PERSONAGENS.md) estão preparados para revisão; ainda não há cards de história durante as partidas. Teste: `node tests/presentation.cjs`.
+As [biografias e finais propostos](docs/HISTORIAS-PERSONAGENS.md) foram aprovados: cards aparecem após vitórias de sets e partidas, e finais narrados acompanham os troféus. A galeria na seleção permite reler; Continuar e Pular liberam o jogo. Teste: `node tests/presentation.cjs`.

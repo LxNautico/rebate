@@ -1,6 +1,6 @@
 # Histórias dos personagens — proposta para revisão
 
-Estas biografias são ficcionais e ainda não aparecem durante as partidas. Idades, alturas, famílias e títulos são propostas editoriais, abertas a ajustes. País de origem é parte da história; a bandeira representada na Copa continua sendo escolha do jogador. Títulos biográficos não contam como troféus conquistados no jogo.
+Estas biografias ficcionais foram aprovadas e implementadas em cards. Idades, alturas, famílias e títulos fazem parte da narrativa. País de origem é parte da história; a bandeira representada na Copa continua sendo escolha do jogador. Títulos biográficos não contam como troféus conquistados no jogo.
 
 ## Alex — o equilíbrio aprendido
 
@@ -82,7 +82,7 @@ Estas biografias são ficcionais e ainda não aparecem durante as partidas. Idad
 
 **Final proposto:** Íris e Joana voltam à primeira quadra. Colocam o troféu no banco e trocam algumas bolas antes de terminar a tarde com uma pequena dança de comemoração.
 
-## Como inserir depois da revisão
+## Cards implementados
 
 - Card 1: ficha técnica na primeira passagem.
 - Card 2: vida pessoal na passagem seguinte.
@@ -96,3 +96,7 @@ Estas biografias são ficcionais e ainda não aparecem durante as partidas. Idad
 ## Apresentação automática implementada
 
 Fechar a seleção com X, em uma página sem partida ativa, mostra trocas entre Alex/Rafa, Lia/Maya, Léo/Nina e Caio/Íris. Os pares alternam a cada oito segundos. Usa animação do próprio jogo, sem vídeo ou som automático. Jogar abre a seleção e iniciar uma partida encerra a apresentação. Pausa e resultado não são substituídos pela demonstração. Preferência por movimento reduzido mostra uma cena estática. A apresentação não altera pontuação, conquistas, salvamentos ou energia.
+
+Os capítulos são exibidos em ordem após vitórias de sets e partidas, até os três capítulos por personagem. Continuar e Pular registram a passagem como vista; a galeria permite reler. O jogo aguarda a leitura e prepara o próximo saque somente depois de fechar o card. O final narrado aparece junto do troféu, ao conquistar torneio ou Copa. A galeria também oferece acesso aos finais, inclusive antes de conquistá-los. Não há preferência permanente para pular toda a história nesta versão.
+
+Teste: `node tests/stories.cjs`.
