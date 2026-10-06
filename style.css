@@ -38,6 +38,13 @@ main{max-width:1300px;width:calc(100% - 24px)}.play-layout{grid-template-columns
 
 .character-style{display:block;font-size:12px;line-height:1.5;color:#ffdb84;min-height:54px;margin:8px 0;text-transform:none}
 
+.court-country{display:flex;align-items:center;justify-content:center;gap:8px;background:#102b33;padding:7px 10px;min-height:36px;font-size:12px;color:#edf4ef;border-bottom:1px solid #45635e;text-align:center}
+.court-country[hidden]{display:none}
+.court-country.your-country{color:#ffdb84;background:#203e40}
+.court-flag{font-size:24px;line-height:1.2;flex-shrink:0}
+#court-lower-country{border-bottom:0;border-top:1px solid #45635e}
+@media(max-width:720px){.court-country{font-size:11px;padding:5px 8px;min-height:32px}.court-flag{font-size:22px}}
+
 #cup-country-choice[hidden],#saved-world-cup[hidden],#world-cup-panel[hidden],#cup-match[hidden],#leave-cup[hidden]{display:none}
 #saved-world-cup{border:1px solid #ffdb84;border-radius:10px;padding:10px;margin:10px 0;background:#193b3e}
 #saved-world-cup strong,#cup-match{color:#ffdb84}

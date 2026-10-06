@@ -8,6 +8,8 @@ Brasil, Portugal, Argentina, Uruguai, Estados Unidos, Canadá, México, França,
 
 Os dezesseis países usam os oito personagens existentes. Cada país recebe um representante no sorteio; seu país usa o personagem escolhido. Habilidades dependem do personagem e da dificuldade, sem bônus de nacionalidade.
 
+As duas extremidades da quadra exibem bandeira, país, personagem e identificação de Você ou Adversário. As identificações acompanham o lado escolhido e ficam fora da área de jogo.
+
 ## Formato
 
 - Quatro grupos de quatro países; todos se enfrentam uma vez. Você joga três partidas.

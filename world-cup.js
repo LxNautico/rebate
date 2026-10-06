@@ -77,6 +77,7 @@ function prepareWorldCup(){
  saveWorldCup();renderWorldCup();
 }
 function renderWorldCup(){
+ renderCourtCountries();
  const panel=document.getElementById('world-cup-panel');panel.hidden=!worldCup;
  const match=document.getElementById('cup-match');match.hidden=!worldCup;
  if(!worldCup)return;
@@ -90,6 +91,20 @@ function renderWorldCup(){
  const bracket=document.getElementById('cup-bracket');bracket.replaceChildren();
  for(const round of worldCup.history){const title=document.createElement('h3');title.textContent=round.stage;bracket.append(title);for(const m of round.matches){const row=document.createElement('p');row.textContent=cupLabel(m.a)+' '+m.sa+' × '+m.sb+' '+cupLabel(m.b)+(m.simulated?' · simulado':'');bracket.append(row);}}
  if(worldCup.phase==='knockout'&&worldCup.status==='active')for(const [a,b] of worldCup.bracket){const row=document.createElement('p');row.textContent=cupLabel(a)+' × '+cupLabel(b);bracket.append(row);}
+}
+function renderCourtCountries(){
+ const upper=document.getElementById('court-upper-country'),lower=document.getElementById('court-lower-country');
+ upper.hidden=lower.hidden=!worldCup;
+ if(!worldCup)return;
+ const own={id:worldCup.country,role:'Você',character:worldCup.character};
+ const rivalId=cupOpponent(worldCup),rival={id:rivalId,role:'Adversário',character:worldCup.roster[rivalId]};
+ const top=worldCup.side==='top';
+ for(const [box,participant] of [[upper,top?own:rival],[lower,top?rival:own]]){
+  box.replaceChildren();
+  const flag=document.createElement('span');flag.className='court-flag';flag.textContent=cupCountry(participant.id).flag;flag.setAttribute('aria-hidden','true');
+  const text=document.createElement('span');text.textContent=cupCountry(participant.id).name+' · '+participant.role+' · '+(characters.find(c=>c.id===participant.character)?.name||'');
+  box.classList.toggle('your-country',participant.role==='Você');box.append(flag,text);
+ }
 }
 function finishWorldCupMatch(){
  if(!worldCup||worldCup.status!=='active')return;
