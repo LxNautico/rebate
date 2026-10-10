@@ -13,6 +13,7 @@ function check(ok,label){if(!ok)throw Error(label);}
 for(const side of ['top','bottom']){
  document.getElementById('competition').value='single';document.getElementById('camera-view').value='first';document.getElementById('table-side').value=side;start();
  check(firstPerson()&&!viewTop()&&hitKey()==='arrowup','own-side perspective');
+ check(Math.abs(firstPersonOpponentFoot()-project(laneX(opponent),0).y)===4,'opponent stands at table edge');drawFirstPersonDestinations();
  const far=project(laneX(player),0),near=project(laneX(player),1);check(far.x===400&&near.x===400&&near.y>far.y&&near.scale>far.scale,'projection');
  const rect={left:0,top:0,width:800,height:900};for(const lane of [2,4,6]){const p=project(laneX(lane),.8);check(Math.abs(firstPersonTap(p.x,p.y,rect)-lane)<1e-8,'touch inverse');}
  frame(0);frame(16);strike();for(let i=0;i<5;i++)frame(66+i*50);check(!serving&&!frameErrorReported,'draw and serve');
