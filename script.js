@@ -147,7 +147,7 @@ function paddle(lane,depth,color,selected){
  const striking=anim>0&&!reduced?Math.sin(Math.PI*Math.min(1,anim/.38)):0;
  const readyLift=preparing&&!reduced?(near?serveWindup/.12:Math.max(0,1-wait/1.2))*3:0;
  
- const screenNear=viewTop()?!near:near;const size=screenNear?155:96;
+ const screenNear=viewTop()?!near:near;const size=screenNear?155:firstPerson()?125:96;
  // Characters stand outside each end of the table; contact marker remains at logical paddle position.
  const bodyX=Math.max(size/2+8,Math.min(800-size/2-8,p.x));
  const footY=firstPerson()&&!near?firstPersonOpponentFoot():screenNear?884:176;
