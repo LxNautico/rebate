@@ -13,7 +13,7 @@ function check(ok,label){if(!ok)throw Error(label);}
 for(const side of ['top','bottom']){
  document.getElementById('competition').value='single';document.getElementById('camera-view').value='first';document.getElementById('table-side').value=side;start();
  check(firstPerson()&&!viewTop()&&hitKey()==='arrowup','own-side perspective');
- check(Math.abs(firstPersonOpponentFoot()-project(laneX(opponent),0).y)===10,'opponent stands at table edge');drawFirstPersonCrowd();
+ check(firstPersonOpponentFoot()-project(laneX(opponent),0).y===-8,'opponent stands at table edge');drawFirstPersonCrowd();drawFirstPersonBoundary();check(firstPersonBallSpeed()===1.18,'experimental ball pace');
  const far=project(.5,0),near=project(.5,1);check(project(.5,.5).y>490&&project(.5,.5).y<520,'net stays near player');check(project(1,0).x-project(0,0).x<400,'far end gently tapered');check(near.y-far.y<280,'lower eye-level view');check(far.x===400&&near.x===400&&near.y>far.y&&near.scale>far.scale,'projection');
  const rect={left:0,top:0,width:800,height:900};for(const lane of [2,4,6]){const p=project(laneX(lane),.8);check(Math.abs(firstPersonTap(p.x,p.y,rect)-lane)<1e-8,'touch inverse');}
  frame(0);frame(16);strike();for(let i=0;i<5;i++)frame(66+i*50);check(!serving&&!frameErrorReported,'draw and serve');ball.direction=-1;ball.depth=.1;firstPersonBallPoint(project(ballX(),ball.depth,ballHeight()));ball.direction=1;opponentAnimation=.38;firstPersonBallPoint(project(ballX(),ball.depth,ballHeight()));
@@ -28,6 +28,6 @@ for(const direction of [-1,1]){ball.direction=direction;const span=direction<0?.
 opponent=6;ball.from=laneX(opponent);ball.direction=-1;ball.depth=0;ball.bounced=true;aiDelay=1;const preparedPose=opponentContactPose();advance(0);check(ball.direction===1&&ball.cameraContact.pose===preparedPose&&opponentContactPose()===preparedPose,'actual return keeps prepared pose');
 for(const position of [0,4,8]){player=position;for(const depth of [0,.5,1]){const left=project(0,depth),right=project(1,depth);check(left.x>=0&&right.x<=800,'entire table visible');check(project(.5,depth).x===400,'table fixed during movement');}}
 document.getElementById('competition').value='tournament';start();check(!firstPerson(),'experimental single only');
-document.getElementById('competition').value='single';document.getElementById('camera-view').value='classic';start();check(!firstPerson()&&hitKey()==='arrowup','classic controls');
+document.getElementById('competition').value='single';document.getElementById('camera-view').value='classic';start();check(!firstPerson()&&hitKey()==='arrowup'&&firstPersonBallSpeed()===1,'classic controls and pace');
 console.log('PASS: first-person perspective, both sides, touch inverse, render/serve and competition restriction.');
 `,sandbox);
