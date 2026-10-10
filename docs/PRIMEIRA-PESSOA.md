@@ -7,3 +7,5 @@ Toque na metade inferior visível indica o destino da corrida, usando a projeç�
 Validação: testes de câmera e todas as suítes existentes. Conferir altura, distância, legibilidade da recepção e conforto no celular; esta versão é experimental.
 
 A numeração foi retirada dessa câmera; o círculo de mira permanece. Silhuetas discretas com braços erguidos e punhos fechados representam a torcida atrás do adversário. Movimento reduzido e pausa mantêm as silhuetas estáticas.
+
+A torcida faz pequenos saltos em ritmos diferentes durante a partida. O adversário fica mais próximo da borda e uma animação de alcance da raquete indica o contato na devolução.
