@@ -93,10 +93,10 @@ function firstPersonBallPoint(p,depth=ball.depth){
 function firstPersonBallSpeed(){return firstPerson()?1.18:1;}
 function drawFirstPersonBoundary(){
  if(!firstPerson())return;
- const points=[{x:20,y:700},{x:170,y:375},{x:630,y:375},{x:780,y:700}];
+ const points=[{x:0,y:375},{x:800,y:375}];
  const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
  const clock=reduced||state!=='playing'?0:(lastTime||0)/1000;
- for(let i=0;i<3;i++){
+ for(let i=0;i<points.length-1;i++){
   const a=points[i],b=points[i+1],height=24;
   polygon([a,b,{x:b.x,y:b.y-height},{x:a.x,y:a.y-height}],'#27454c','#52716d55');
   const length=Math.hypot(b.x-a.x,b.y-a.y);

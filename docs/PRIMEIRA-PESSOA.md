@@ -25,3 +25,5 @@ Ajustes do diagnóstico: ballHeight recebe o progresso amostrado; o rastro proje
 Raquete do usuário: preparação curta ao armar o golpe, encontro no ponto visual da bola no instante do som, brilho breve e retorno suave. A devolução parte do mesmo ponto de contato. A chuva conserva seus controles atuais. Testes verificam encontro, continuidade e retorno à posição de espera.
 
 Torcida em arquibancada frontal: seis fileiras retas de trinta pessoas, paralelas à linha de fundo, substituem o arco lateral. As fileiras distantes ficam menores; portes, gestos e ritmos continuam variados. A torcida é desenhada atrás do adversário.
+
+A parede da primeira pessoa fica apenas no fundo, paralela à linha atrás do adversário, atravessando a largura da arena. As muretas laterais foram retiradas; o nome REBATE! continua passando na parede do fundo.
