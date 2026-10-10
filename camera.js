@@ -77,3 +77,19 @@ function drawFirstPersonBoundary(){
   ctx.restore();
  }
 }
+
+function drawFirstPersonGround(){
+ if(!firstPerson())return;
+ const floor=ctx.createLinearGradient(0,350,0,900);
+ floor.addColorStop(0,courtThemes[selectedCourt].colors[0]);floor.addColorStop(1,courtThemes[selectedCourt].colors[1]);
+ // One continuous floor extends behind both baselines and out to the arena walls.
+ ctx.fillStyle=floor;ctx.fillRect(0,350,800,550);
+ ctx.fillStyle='#fff3';ctx.globalAlpha=.12;
+ for(let i=0;i<360;i++){
+  const x=(i*137)%800,y=352+(i*83)%548;
+  ctx.fillRect(x,y,1+(y-350)/400,1);
+ }
+ ctx.globalAlpha=1;
+ const foot=project(laneX(opponent),0);
+ ctx.beginPath();ctx.ellipse(foot.x,firstPersonOpponentFoot()+1,29,5,0,0,Math.PI*2);ctx.fillStyle='#31221d28';ctx.fill();
+}
