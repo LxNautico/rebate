@@ -19,3 +19,5 @@ Revisão de imersão: superfície menos vista por cima, adversário maior e raqu
 Revisão de piso e ritmo: na primeira pessoa, a quadra não tem a sombra externa nem a espessura frontal de mesa elevada. O adversário fica atrás da linha, a raquete próxima da borda e uma mureta discreta mostra REBATE! em movimento lento (estático na pausa e com movimento reduzido). A bola anda 18% mais rápido e o arco visual é mais baixo, preservando os pontos de contato. A câmera clássica mantém seu ritmo e desenho.
 
 Piso contínuo: a mesma superfície passa por trás do adversário, pelas laterais e sob a raquete em primeiro plano. A área de jogo é delimitada por linhas sobre esse piso, sem um retângulo de cor isolado. Textura leve e pequena sombra de apoio nos pés reforçam que ambos jogam no chão.
+
+Ajustes do diagnóstico: ballHeight recebe o progresso amostrado; o rastro projeta a altura anterior e o ajuste de contato sem modificar a bola. Sombras variam com a altura e também aparecem na Chuva de Bolas. Auxiliares em primeira pessoa usam escala projetada calibrada para acompanhar o adversário e apoiam os pés no mesmo piso.

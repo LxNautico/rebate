@@ -47,17 +47,17 @@ function opponentRacketPoint(){
  const pose=opponentContactPose(),body=project(laneX(opponent),0);
  return {x:body.x+(pose===1?-66:pose===2?66:0),y:firstPersonOpponentFoot()-(pose?120:92)};
 }
-function firstPersonBallPoint(p){
+function firstPersonBallPoint(p,depth=ball.depth){
  if(!firstPerson()||serving||pointDelay>0||arenaRain||musicalDance)return p;
  const incoming=ball.direction<0;
  if(incoming&&Math.abs(laneX(opponent)-ball.from)>athleteTolerance('opponent'))return p;
  if(!incoming&&!ball.cameraContact)return p;
  // The whole post-bounce rise meets the racket; the return departs along a continuous arc.
  const span=incoming?.22:.5;
- if(ball.depth>=span)return p;
+ if(depth>=span)return p;
  const contact=incoming?opponentRacketPoint():ball.cameraContact;
  const endpoint=project(ball.from,0,incoming?41:31);
- const weight=Math.pow(1-Math.max(0,ball.depth)/span,2);
+ const weight=Math.pow(1-Math.max(0,depth)/span,2);
  return {...p,x:p.x+(contact.x-endpoint.x)*weight,y:p.y+(contact.y-endpoint.y)*weight};
 }
 
