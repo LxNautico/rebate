@@ -33,16 +33,15 @@ document.getElementById('camera-view').addEventListener('change',()=>{if(state==
 
 function firstPersonOpponentFoot(){return project(laneX(opponent),0).y-8;}
 function drawFirstPersonCrowd(){
- if(!firstPerson())return;
  const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
- const clock=reduced||state!=='playing'?0:(lastTime||0)/1000;
+ const clock=reduced?0:state==='ready'?presentationTime:state==='playing'?(lastTime||0)/1000:0;
  ctx.save();ctx.lineCap='round';
  for(let i=0;i<180;i++){
   const phase=i*2.399,speed=1.2+(i%7)*.21,kind=i%5;
   const bounce=reduced?0:Math.max(0,Math.sin(clock*speed+phase))*(kind===0?7:3);
   const row=Math.floor(i/30),column=i%30;
-  const size=(.72+(i%4)*.09)*(.6+row*.07);
-  const x=12+column*26+(row%2)*9,y=135+row*31-bounce;
+  const size=(.72+(i%4)*.09)*(.6+row*.07)*(firstPerson()?1:.5);
+  const x=12+column*26+(row%2)*9,y=(firstPerson()?135+row*31:30+row*15)-bounce*(firstPerson()?1:.5);
   const wave=reduced?0:Math.sin(clock*speed+phase);
   ctx.save();ctx.translate(x,y);ctx.scale(size,size);
   ctx.fillStyle=['#081d2970','#102b357d','#16333d80','#0b233080'][i%4];ctx.strokeStyle=ctx.fillStyle;
@@ -92,10 +91,10 @@ function firstPersonBallPoint(p,depth=ball.depth){
 
 function firstPersonBallSpeed(){return firstPerson()?1.18:1;}
 function drawFirstPersonBoundary(){
- if(!firstPerson())return;
- const points=[{x:0,y:375},{x:800,y:375}];
+ const wallY=firstPerson()?375:145;
+ const points=[{x:0,y:wallY},{x:800,y:wallY}];
  const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
- const clock=reduced||state!=='playing'?0:(lastTime||0)/1000;
+ const clock=reduced?0:state==='ready'?presentationTime:state==='playing'?(lastTime||0)/1000:0;
  for(let i=0;i<points.length-1;i++){
   const a=points[i],b=points[i+1],height=24;
   polygon([a,b,{x:b.x,y:b.y-height},{x:a.x,y:a.y-height}],'#27454c','#52716d55');
@@ -107,18 +106,18 @@ function drawFirstPersonBoundary(){
  }
 }
 
-function drawFirstPersonGround(){
- if(!firstPerson())return;
- const floor=ctx.createLinearGradient(0,350,0,900);
- floor.addColorStop(0,courtThemes[selectedCourt].colors[0]);floor.addColorStop(1,courtThemes[selectedCourt].colors[1]);
+function drawFirstPersonGround(theme=selectedCourt){
+ const start=firstPerson()?350:120;
+ const floor=ctx.createLinearGradient(0,start,0,900);
+ floor.addColorStop(0,courtThemes[theme].colors[0]);floor.addColorStop(1,courtThemes[theme].colors[1]);
  // One continuous floor extends behind both baselines and out to the arena walls.
- ctx.fillStyle=floor;ctx.fillRect(0,350,800,550);
+ ctx.fillStyle=floor;ctx.fillRect(0,start,800,900-start);
  ctx.fillStyle='#fff3';ctx.globalAlpha=.12;
  for(let i=0;i<360;i++){
-  const x=(i*137)%800,y=352+(i*83)%548;
-  ctx.fillRect(x,y,1+(y-350)/400,1);
+  const x=(i*137)%800,y=start+2+(i*83)%(898-start);
+  ctx.fillRect(x,y,1+(y-start)/400,1);
  }
  ctx.globalAlpha=1;
  const foot=project(laneX(opponent),0);
- ctx.beginPath();ctx.ellipse(foot.x,firstPersonOpponentFoot()+1,29,5,0,0,Math.PI*2);ctx.fillStyle='#31221d28';ctx.fill();
+ ctx.beginPath();ctx.ellipse(foot.x,firstPerson()?firstPersonOpponentFoot()+1:foot.y+(viewTop()?46:-7),29,5,0,0,Math.PI*2);ctx.fillStyle='#31221d28';ctx.fill();
 }

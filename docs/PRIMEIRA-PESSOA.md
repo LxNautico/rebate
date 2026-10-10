@@ -27,3 +27,5 @@ Raquete do usuário: preparação curta ao armar o golpe, encontro no ponto visu
 Torcida em arquibancada frontal: seis fileiras retas de trinta pessoas, paralelas à linha de fundo, substituem o arco lateral. As fileiras distantes ficam menores; portes, gestos e ritmos continuam variados. A torcida é desenhada atrás do adversário.
 
 A parede da primeira pessoa fica apenas no fundo, paralela à linha atrás do adversário, atravessando a largura da arena. As muretas laterais foram retiradas; o nome REBATE! continua passando na parede do fundo.
+
+Cenário compartilhado: câmera normal e apresentação também usam chão contínuo, torcida em seis fileiras e parede única de fundo. Os pés dos personagens e auxiliares acompanham a projeção das linhas de base. Na apresentação o piso acompanha a troca de quadras e a bola tem sombra, preservando o estado independente da demonstração.
