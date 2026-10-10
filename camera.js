@@ -102,7 +102,11 @@ function drawFirstPersonBoundary(){
   const length=Math.hypot(b.x-a.x,b.y-a.y);
   ctx.save();ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.lineTo(b.x,b.y-height);ctx.lineTo(a.x,a.y-height);ctx.closePath();ctx.clip();
   ctx.translate(a.x,a.y-8);ctx.rotate(Math.atan2(b.y-a.y,b.x-a.x));ctx.font='bold 13px system-ui';ctx.fillStyle='#b7c5a650';ctx.textAlign='left';
-  for(let x=-150+(clock*12)%150;x<length+150;x+=150)ctx.fillText('REBATE!',x,0);
+  const message='REBATE!   •   Conheça o Universo Queima-Queima em https://universo-queima-queima.netlify.app/   •   Criador: Alex Alexandre Guedes Ramos';
+  const measured=ctx.measureText(message)?.width;
+  const spacing=Number.isFinite(measured)?measured+100:1350;
+  const offset=(clock*18)%spacing;
+  for(let x=-offset;x<length+spacing;x+=spacing)ctx.fillText(message,x,0);
   ctx.restore();
  }
 }
