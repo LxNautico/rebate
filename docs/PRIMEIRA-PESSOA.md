@@ -13,3 +13,5 @@ A torcida faz pequenos saltos em ritmos diferentes durante a partida. O adversá
 A perspectiva amplia o lado adversário e aproxima a rede do centro visual. A torcida contorna o fundo e as laterais em curva. O contato usa apenas a raquete do sprite, sem sobrepor outra raquete.
 
 A revisão frontal reduz a altura aparente da mesa, afunila levemente o lado adversário e mantém a rede próxima da posição anterior. O adversário aparece maior; a torcida fica afastada para trás. O ajuste da bola junto à raquete dura apenas uma faixa curta e usa saída linear, evitando retenção visual.
+
+Revisão de imersão: superfície menos vista por cima, adversário maior e raquete do usuário junto à borda. A torcida tem 41 silhuetas, com variações de porte, postura, gestos e ritmos. A trajetória sobe desde o quique até a raquete e sai em arco contínuo; o ponto de contato e a pose são preservados na inversão da bola. Testes verificam continuidade, saída e manutenção da pose na devolução real.
