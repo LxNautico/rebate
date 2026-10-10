@@ -109,7 +109,7 @@ function drawArenaRain(){
  const rain=arenaRain;if(!rain)return;
  const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
  for(const helper of rain.helpers){
-  const p=project(laneX(helper.lane),0),near=isTopSide(),size=near?155:96;
+  const p=project(laneX(helper.lane),0),near=viewTop(),size=near?155:96;
   const travel=rain.leaving?Math.min(1,(rain.time-5)/.6):1-Math.min(1,rain.time/.6);
   const x=p.x+(helper.side<0?-p.x-size:800-p.x+size)*travel;
   const source=spriteSource(helper.id,opponentUniform,near,helper.hit>0?(helper.side<0?1:2):0);
@@ -117,8 +117,8 @@ function drawArenaRain(){
  }
  for(const b of rain.balls)if(b.direction===1&&!rain.leaving){const lane=b.landing*9-.5;polygon([project(lane/9,.55),project((lane+1)/9,.55),project((lane+1)/9,1),project(lane/9,1)],'#a9f2ff18');}
  for(const b of rain.balls){const progress=b.direction===1?b.depth:1-b.depth,q=Math.min(1,progress/.78),height=progress<.78?13+110*4*q*(1-q):13+28*Math.sin((progress-.78)/.22*Math.PI/2),p=project(rainBallX(b),Math.max(0,Math.min(1,b.depth)),height);ctx.beginPath();ctx.arc(p.x,p.y,12*p.scale,0,Math.PI*2);ctx.fillStyle=b.direction===1?'#a9f2ff':'#ffdb84';ctx.fill();}
- if(rain.balls.some(b=>b.direction===1&&b.depth>=.8&&b.depth<=1.12)){ctx.fillStyle='#a9f2ff';ctx.font='bold 24px system-ui';ctx.textAlign='center';ctx.fillText(hitArrow()+' REBATA',400,isTopSide()?115:870);}
+ if(rain.balls.some(b=>b.direction===1&&b.depth>=.8&&b.depth<=1.12)){ctx.fillStyle='#a9f2ff';ctx.font='bold 24px system-ui';ctx.textAlign='center';ctx.fillText(hitArrow()+' REBATA',400,viewTop()?115:870);}
  ctx.fillStyle='#ffdb84';ctx.font='bold 22px system-ui';ctx.textAlign='center';ctx.fillText(rain.leaving?'Auxiliares saindo…':'CHUVA · '+Math.max(0,5-rain.time).toFixed(1)+'s · Você '+rain.ownSaved+'/'+rain.ownTotal+' | Rivais '+rain.rivalSaved+'/'+rain.rivalTotal,400,nearRainLabelY());
 }
-function nearRainLabelY(){return isTopSide()?815:115;}
+function nearRainLabelY(){return viewTop()?815:115;}
 document.getElementById('arena-power').addEventListener('change',renderArena);

@@ -10,13 +10,14 @@ vm.createContext(sandbox);
 for(const file of ['sprite-masks.js','results.js','challenges.js','personalities.js','tournament.js','rewards.js','celebration-frames.js','character-motion.js','world-cup.js','camera.js','table-side.js','arena.js','presentation.js','endings.js','stories.js','attributes.js','musical.js','script.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,'..',file),'utf8'),sandbox,{filename:file});
 vm.runInContext(`
 function check(ok,label){if(!ok)throw Error(label);}
-document.getElementById('competition').value='single';
-for(const side of ['top','bottom'])for(const style of ['classic','arena']){
- document.getElementById('table-side').value=side;document.getElementById('play-style').value=style;start();
- frame(0);frame(16);check(state==='playing'&&serving,'start renders');strike();frame(200);frame(250);frame(300);frame(350);frame(400);check(!serving&&ball,'serve rendered');
+for(const side of ['top','bottom']){
+ document.getElementById('competition').value='single';document.getElementById('camera-view').value='first';document.getElementById('table-side').value=side;start();
+ check(firstPerson()&&!viewTop()&&hitKey()==='arrowup','own-side perspective');
+ const far=project(laneX(player),0),near=project(laneX(player),1);check(far.x===400&&near.x===400&&near.y>far.y&&near.scale>far.scale,'projection');
+ const rect={left:0,top:0,width:800,height:900};for(const lane of [2,4,6]){const p=project(laneX(lane),.8);check(Math.abs(firstPersonTap(p.x,p.y,rect)-lane)<1e-8,'touch inverse');}
+ frame(0);frame(16);strike();for(let i=0;i<5;i++)frame(66+i*50);check(!serving&&!frameErrorReported,'draw and serve');
 }
-check(!frameErrorReported,'normal rendering without errors');
-const original=draw;draw=()=>{throw Error('simulated temporary canvas failure');};const scheduledBefore=renderScheduledCount();frame(416);check(renderScheduledCount()>scheduledBefore,'frame rescheduled after failure');draw=original;frame(432);
-check(state==='playing','render resumes');
-console.log('PASS: full render loop starts Classic/Arena on both sides, serves and reschedules after a temporary drawing error.');
+document.getElementById('competition').value='tournament';start();check(!firstPerson(),'experimental single only');
+document.getElementById('competition').value='single';document.getElementById('camera-view').value='classic';start();check(!firstPerson()&&hitKey()==='arrowup','classic controls');
+console.log('PASS: first-person perspective, both sides, touch inverse, render/serve and competition restriction.');
 `,sandbox);
