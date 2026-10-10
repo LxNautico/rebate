@@ -4,7 +4,31 @@ function viewTop(){return !firstPerson()&&isTopSide();}
 function applyCamera(){cameraMode=document.getElementById('competition').value==='single'&&document.getElementById('camera-view').value==='first'?'first':'classic';}
 function firstPersonProjection(x,depth,height=0){const distance=1.8-.8*depth,scale=1/distance;return {x:400+(x-.5)*700*scale,y:400+260*depth/distance-height*scale,scale};}
 function firstPersonTap(clientX,clientY,rect){const x=(clientX-rect.left)/rect.width*800,y=(clientY-rect.top)/rect.height*900,offset=Math.max(0,y-400),depth=Math.max(0,Math.min(1,offset*1.8/(260+offset*.8))),width=700/(1.8-.8*depth);return Math.max(0,Math.min(8,(.5+(x-400)/width)*9-.5));}
-function drawFirstPersonRacket(){const lift=Math.sin(Math.PI*Math.min(1,playerAnimation/.38))*35;ctx.save();ctx.translate(Math.max(70,Math.min(730,project(laneX(player),1).x)),project(.5,1).y+12-lift);ctx.rotate(-.3+Math.sin(playerAnimation*8)*.15);ctx.fillStyle='#be926b';ctx.fillRect(-9,12,18,85);ctx.beginPath();ctx.ellipse(0,-25,55,65,0,0,Math.PI*2);ctx.fillStyle='#c66749';ctx.fill();ctx.strokeStyle='#ffe0ab';ctx.lineWidth=5;ctx.stroke();ctx.restore();}
+let playerCameraHit=null;
+function capturePlayerCameraHit(){
+ if(!firstPerson()||!ball||arenaRain)return null;
+ return firstPersonBallPoint(project(ballX(),Math.max(0,Math.min(1,ball.depth)),ballHeight()));
+}
+function playerRacketCenter(){
+ const rest={x:Math.max(70,Math.min(730,project(laneX(player),1).x)),y:project(.5,1).y-13};
+ const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ if(playerAnimation>0&&playerCameraHit){
+  const t=Math.max(0,Math.min(1,1-playerAnimation/.38)),ease=t*t*(3-2*t);
+  return {x:playerCameraHit.x+(rest.x-playerCameraHit.x)*ease,y:playerCameraHit.y+(rest.y-playerCameraHit.y)*ease-(reduced?0:Math.sin(Math.PI*t)*18)};
+ }
+ const preparing=state==='playing'&&pointDelay===0&&(swing>0||serving&&server===1&&serveWindup>0);
+ return {x:rest.x+(preparing&&!reduced?effect*10:0),y:rest.y+(preparing&&!reduced?12:0)};
+}
+function drawFirstPersonRacket(){
+ const center=playerRacketCenter(),active=playerAnimation>0&&playerCameraHit;
+ ctx.save();ctx.translate(center.x,center.y);ctx.rotate(active?-.3*(1-playerAnimation/.38):-.3);
+ ctx.fillStyle='#be926b';ctx.fillRect(-9,37,18,85);ctx.beginPath();ctx.ellipse(0,0,55,65,0,0,Math.PI*2);ctx.fillStyle='#c66749';ctx.fill();ctx.strokeStyle='#ffe0ab';ctx.lineWidth=5;ctx.stroke();ctx.restore();
+ if(active&&playerAnimation>.26){
+  const t=(.38-playerAnimation)/.12;
+  ctx.save();ctx.beginPath();ctx.arc(playerCameraHit.x,playerCameraHit.y,14+t*17,0,Math.PI*2);ctx.strokeStyle='#fff3bc';ctx.globalAlpha=1-t;ctx.lineWidth=2;ctx.stroke();ctx.restore();
+ }
+}
+
 document.getElementById('camera-view').addEventListener('change',()=>{if(state==='ready'||state==='gameover')applyCamera();});
 
 function firstPersonOpponentFoot(){return project(laneX(opponent),0).y-8;}
@@ -49,6 +73,10 @@ function opponentRacketPoint(){
 }
 function firstPersonBallPoint(p,depth=ball.depth){
  if(!firstPerson()||serving||pointDelay>0||arenaRain||musicalDance)return p;
+ if(ball.direction<0&&ball.playerContact&&depth>.78){
+  const endpoint=project(ball.to,1,31),weight=Math.pow((depth-.78)/.22,2);
+  return {...p,x:p.x+(ball.playerContact.x-endpoint.x)*weight,y:p.y+(ball.playerContact.y-endpoint.y)*weight};
+ }
  const incoming=ball.direction<0;
  if(incoming&&Math.abs(laneX(opponent)-ball.from)>athleteTolerance('opponent'))return p;
  if(!incoming&&!ball.cameraContact)return p;

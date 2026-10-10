@@ -21,3 +21,5 @@ Revisão de piso e ritmo: na primeira pessoa, a quadra não tem a sombra externa
 Piso contínuo: a mesma superfície passa por trás do adversário, pelas laterais e sob a raquete em primeiro plano. A área de jogo é delimitada por linhas sobre esse piso, sem um retângulo de cor isolado. Textura leve e pequena sombra de apoio nos pés reforçam que ambos jogam no chão.
 
 Ajustes do diagnóstico: ballHeight recebe o progresso amostrado; o rastro projeta a altura anterior e o ajuste de contato sem modificar a bola. Sombras variam com a altura e também aparecem na Chuva de Bolas. Auxiliares em primeira pessoa usam escala projetada calibrada para acompanhar o adversário e apoiam os pés no mesmo piso.
+
+Raquete do usuário: preparação curta ao armar o golpe, encontro no ponto visual da bola no instante do som, brilho breve e retorno suave. A devolução parte do mesmo ponto de contato. A chuva conserva seus controles atuais. Testes verificam encontro, continuidade e retorno à posição de espera.
