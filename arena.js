@@ -96,11 +96,11 @@ function advanceArenaRain(dt){
   if(!b.bounced&&(b.direction===1?b.depth:1-b.depth)>=.78){b.bounced=true;gameAudio.play('bounce');if(b.landing<0||b.landing>1){if(b.direction===-1){rain.ownTotal++;matchStats.currentSequence=0;}else rain.rivalTotal++;remove.add(b);continue;}musicalBounce(b.landing,b.direction===-1);}
   if(b.direction===-1&&b.depth<=0){
    rain.rivalTotal++;const defender=defenders.reduce((best,d)=>Math.abs(laneX(d.lane)-b.landing)<Math.abs(laneX(best.lane)-b.landing)?d:best);
-   if(Math.abs(laneX(defender.lane)-b.landing)<=.085){rain.rivalSaved++;b.direction=1;b.depth=0;b.origin=laneX(defender.lane);b.landing=laneX(Math.max(0,Math.min(8,player+(b.serial%3-1)*1.1)));b.curve=0;b.bounced=false;gameAudio.play('hit');if(defender.main)opponentAnimation=.38;else defender.hit=.38;}else remove.add(b);
+   if(Math.abs(laneX(defender.lane)-b.landing)<=.085){rain.rivalSaved++;const pose=b.landing<.5?1:2;if(firstPerson())b.cameraContact={...rainDefenderPoint(defender,pose),pose};if(defender.main)opponentPose=pose;else defender.pose=pose;b.playerContact=null;b.direction=1;b.depth=0;b.origin=laneX(defender.lane);b.landing=laneX(Math.max(0,Math.min(8,player+(b.serial%3-1)*1.1)));b.curve=0;b.bounced=false;gameAudio.play('hit');if(defender.main)opponentAnimation=.38;else defender.hit=.38;}else remove.add(b);
   }
  }
  const hittable=rain.balls.filter(b=>!remove.has(b)&&b.direction===1&&b.depth>=.8&&b.depth<=1.12&&Math.abs(laneX(player)-rainBallX(b))<=athleteTolerance('player')).sort((a,b)=>b.depth-a.depth);
- if(swing>0&&hittable.length){const b=hittable[0];rain.ownTotal++;rain.ownSaved++;score++;matchStats.currentSequence++;matchStats.longestSequence=Math.max(matchStats.longestSequence,matchStats.currentSequence);ui.score.textContent=score;updateChallenges();trainReturn(effect,{from:b.origin,to:b.landing});gameAudio.play('hit');playerAnimation=.38;playerPose=effect<0?1:2;swing=0;b.depth=1;b.direction=-1;b.origin=laneX(player);b.landing=gestureAim===null?laneX(target===null?player:target):laneX(gestureAim);gestureAim=null;b.curve=effect*.07*athleteFactor('player','technique');b.bounced=false;}
+ if(swing>0&&hittable.length){const b=hittable[0];if(firstPerson()){playerCameraHit=rainBallPoint(b);b.playerContact={...playerCameraHit};}b.cameraContact=null;rain.ownTotal++;rain.ownSaved++;score++;matchStats.currentSequence++;matchStats.longestSequence=Math.max(matchStats.longestSequence,matchStats.currentSequence);ui.score.textContent=score;updateChallenges();trainReturn(effect,{from:b.origin,to:b.landing});gameAudio.play('hit');playerAnimation=.38;playerPose=effect<0?1:2;swing=0;b.depth=1;b.direction=-1;b.origin=laneX(player);b.landing=gestureAim===null?laneX(target===null?player:target):laneX(gestureAim);gestureAim=null;b.curve=effect*.07*athleteFactor('player','technique');b.bounced=false;}
  for(const b of rain.balls)if(!remove.has(b)&&b.direction===1&&b.depth>1.12){rain.ownTotal++;matchStats.currentSequence=0;remove.add(b);}
  rain.balls=rain.balls.filter(b=>!remove.has(b));
  ui.feedback.textContent='Chuva · '+Math.max(0,5-rain.time).toFixed(1)+'s · Você '+rain.ownSaved+'/'+rain.ownTotal+' · Rivais '+rain.rivalSaved+'/'+rain.rivalTotal;
@@ -112,13 +112,44 @@ function drawArenaRain(){
   const p=project(laneX(helper.lane),0),near=viewTop(),size=firstPerson()?288*p.scale:near?155:96;
   const travel=rain.leaving?Math.min(1,(rain.time-5)/.6):1-Math.min(1,rain.time/.6);
   const x=p.x+(helper.side<0?-p.x-size:800-p.x+size)*travel;
-  const source=spriteSource(helper.id,opponentUniform,near,helper.hit>0?(helper.side<0?1:2):0);
+  const source=spriteSource(helper.id,opponentUniform,near,rainDefenderPose(helper));
   if(source){ctx.save();ctx.translate(x,p.y+(near?45:-8));drawWalkingSprite(ctx,source,size,{phase:helper.phase,amount:travel>0?.95:.4},reduced);ctx.restore();}
  }
  for(const b of rain.balls)if(b.direction===1&&!rain.leaving){const lane=b.landing*9-.5;polygon([project(lane/9,.55),project((lane+1)/9,.55),project((lane+1)/9,1),project(lane/9,1)],'#a9f2ff18');}
- for(const b of rain.balls){const progress=b.direction===1?b.depth:1-b.depth,q=Math.min(1,progress/.78),height=progress<.78?13+110*4*q*(1-q):13+28*Math.sin((progress-.78)/.22*Math.PI/2),p=project(rainBallX(b),Math.max(0,Math.min(1,b.depth)),height);drawBallShadow(project(rainBallX(b),Math.max(0,Math.min(1,b.depth))),height);ctx.beginPath();ctx.arc(p.x,p.y,12*p.scale,0,Math.PI*2);ctx.fillStyle=b.direction===1?'#a9f2ff':'#ffdb84';ctx.fill();}
- if(rain.balls.some(b=>b.direction===1&&b.depth>=.8&&b.depth<=1.12)){ctx.fillStyle='#a9f2ff';ctx.font='bold 24px system-ui';ctx.textAlign='center';ctx.fillText(hitArrow()+' REBATA',400,viewTop()?115:870);}
+ for(const b of rain.balls){const height=rainBallHeight(b),p=rainBallPoint(b);drawBallShadow(project(rainBallX(b),Math.max(0,Math.min(1,b.depth))),height);ctx.beginPath();ctx.arc(p.x,p.y,12*p.scale,0,Math.PI*2);ctx.fillStyle=b.direction===1?'#a9f2ff':'#ffdb84';ctx.fill();}
+ if(rain.balls.some(b=>b.direction===1&&b.depth>=.8&&b.depth<=1.12)){ctx.fillStyle='#a9f2ff';ctx.font='bold 24px system-ui';ctx.textAlign='center';ctx.fillText(hitArrow()+' REBATA',400,firstPerson()?825:viewTop()?115:870);}
  ctx.fillStyle='#ffdb84';ctx.font='bold 22px system-ui';ctx.textAlign='center';ctx.fillText(rain.leaving?'Auxiliares saindo…':'CHUVA · '+Math.max(0,5-rain.time).toFixed(1)+'s · Você '+rain.ownSaved+'/'+rain.ownTotal+' | Rivais '+rain.rivalSaved+'/'+rain.rivalTotal,400,nearRainLabelY());
 }
 function nearRainLabelY(){return viewTop()?815:115;}
 document.getElementById('arena-power').addEventListener('change',renderArena);
+
+function rainDefenderPose(defender){
+ const active=defender.main?opponentAnimation>0:defender.hit>0;
+ if(active)return defender.main?opponentPose:defender.pose||1;
+ if(firstPerson()&&arenaRain){
+  const next=arenaRain.balls.filter(b=>b.direction<0&&b.depth<.22&&Math.abs(laneX(defender.lane)-b.landing)<=.085).sort((a,b)=>a.depth-b.depth)[0];
+  if(next)return next.landing<.5?1:2;
+ }
+ return 0;
+}
+function rainDefenderPoint(defender,pose){
+ const p=project(laneX(defender.lane),0);
+ return {x:p.x+(pose===1?-66:66),y:p.y-8-120};
+}
+function rainBallHeight(b){
+ const progress=b.direction===1?b.depth:1-b.depth,q=Math.min(1,progress/.78);
+ return progress<.78?13+(firstPerson()?75:110)*4*q*(1-q):13+28*Math.sin((progress-.78)/.22*Math.PI/2);
+}
+function rainBallPoint(b){
+ const depth=Math.max(0,Math.min(1,b.depth)),p=project(rainBallX(b),depth,rainBallHeight(b));
+ if(!firstPerson())return p;
+ let contact,endpoint,weight=0;
+ if(b.direction<0&&b.playerContact&&depth>.78){contact=b.playerContact;endpoint=project(b.origin,1,13);weight=Math.pow((depth-.78)/.22,2);}
+ else if(b.direction>0&&b.cameraContact&&depth<.5){contact=b.cameraContact;endpoint=project(b.origin,0,13);weight=Math.pow(1-depth/.5,2);}
+ else if(b.direction<0&&depth<.22&&arenaRain){
+  const defenders=[{lane:opponent,main:true},...arenaRain.helpers];
+  const defender=defenders.reduce((best,d)=>Math.abs(laneX(d.lane)-b.landing)<Math.abs(laneX(best.lane)-b.landing)?d:best);
+  if(Math.abs(laneX(defender.lane)-b.landing)<=.085){contact=rainDefenderPoint(defender,b.landing<.5?1:2);endpoint=project(b.landing,0,41);weight=Math.pow(1-depth/.22,2);}
+ }
+ return contact?{...p,x:p.x+(contact.x-endpoint.x)*weight,y:p.y+(contact.y-endpoint.y)*weight}:p;
+}

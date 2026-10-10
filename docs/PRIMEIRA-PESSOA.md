@@ -29,3 +29,5 @@ Torcida em arquibancada frontal: seis fileiras retas de trinta pessoas, paralela
 A parede da primeira pessoa fica apenas no fundo, paralela à linha atrás do adversário, atravessando a largura da arena. As muretas laterais foram retiradas; o nome REBATE! continua passando na parede do fundo.
 
 Cenário compartilhado: câmera normal e apresentação também usam chão contínuo, torcida em seis fileiras e parede única de fundo. Os pés dos personagens e auxiliares acompanham a projeção das linhas de base. Na apresentação o piso acompanha a troca de quadras e a bola tem sombra, preservando o estado independente da demonstração.
+
+Chuva de Bolas em primeira pessoa: bolas encontram a raquete do defensor e preservam o ponto na inversão; usuário recebe animação e brilho em cada defesa. Auxiliares preparam a pose pelo lado da bola; o arco é mais baixo. Testes verificam continuidade das devoluções dos dois lados e encontro da raquete do usuário. Duração, contagem de defesas e pontuação permanecem.

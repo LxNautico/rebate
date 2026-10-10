@@ -64,6 +64,7 @@ function drawFirstPersonCrowd(){
 
 // Use the racket already present in the sprite; never draw a detached second racket.
 function opponentContactPose(){
+ if(firstPerson()&&arenaRain)return rainDefenderPose({lane:opponent,main:true});
  if(firstPerson()&&state==='playing'&&!serving&&pointDelay===0&&ball&&ball.direction<0&&ball.depth<.22)return ball.from<.5?1:2;
  return opponentAnimation>0?(firstPerson()&&ball&&ball.cameraContact?ball.cameraContact.pose:opponentPose):0;
 }

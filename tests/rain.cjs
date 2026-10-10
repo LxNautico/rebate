@@ -28,8 +28,12 @@ for(const fps of [30,60,120]){
  check(pointDelay>0,'normal point interval');
  start();check(!arenaRain,'restart clears');
 }
+document.getElementById('camera-view').value='first';
 for(const side of ['top','bottom']){
  document.getElementById('table-side').value=side;start();arenaEnergy=100;send();armArena();send();advance(.7);drawArenaRain();
+ const b={depth:0,origin:laneX(player),landing:laneX(opponent),direction:-1,curve:0,bounced:true,serial:0};arenaRain.balls=[b];
+ const impact=rainBallPoint(b);advanceArenaRain(0);const returned=rainBallPoint(b);check(b.direction===1&&Math.hypot(impact.x-returned.x,impact.y-returned.y)<1e-8,'rain rival contact continuity');
+ b.depth=.9;b.landing=laneX(player);const own=rainBallPoint(b);swing=.65;advanceArenaRain(0);const outgoing=rainBallPoint(b);check(b.direction===-1&&Math.hypot(own.x-outgoing.x,own.y-outgoing.y)<1e-8,'rain own contact continuity');check(Math.hypot(playerRacketCenter().x-own.x,playerRacketCenter().y-own.y)<1e-8,'rain racket meets defended ball');
  pause();quitMatch();check(!arenaRain&&state==='ready','quit clears');
 }
 start();startArenaRain();arenaRain.ownSaved=1;arenaRain.ownTotal=2;arenaRain.rivalSaved=2;arenaRain.rivalTotal=2;finishArenaRain();check(opponentPoints===1,'defence ratio opponent wins');
