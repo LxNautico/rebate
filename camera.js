@@ -37,12 +37,13 @@ function drawFirstPersonCrowd(){
  const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
  const clock=reduced||state!=='playing'?0:(lastTime||0)/1000;
  ctx.save();ctx.lineCap='round';
- for(let i=0;i<41;i++){
+ for(let i=0;i<180;i++){
   const phase=i*2.399,speed=1.2+(i%7)*.21,kind=i%5;
   const bounce=reduced?0:Math.max(0,Math.sin(clock*speed+phase))*(kind===0?7:3);
-  const angle=Math.PI+i*Math.PI/40;
-  const x=400+374*Math.cos(angle),y=390+245*Math.sin(angle)+(i%3)*4-bounce;
-  const size=.72+(i%4)*.09,wave=reduced?0:Math.sin(clock*speed+phase);
+  const row=Math.floor(i/30),column=i%30;
+  const size=(.72+(i%4)*.09)*(.6+row*.07);
+  const x=12+column*26+(row%2)*9,y=135+row*31-bounce;
+  const wave=reduced?0:Math.sin(clock*speed+phase);
   ctx.save();ctx.translate(x,y);ctx.scale(size,size);
   ctx.fillStyle=['#081d2970','#102b357d','#16333d80','#0b233080'][i%4];ctx.strokeStyle=ctx.fillStyle;
   ctx.beginPath();ctx.arc(0,0,7+(i%3),0,Math.PI*2);ctx.fill();

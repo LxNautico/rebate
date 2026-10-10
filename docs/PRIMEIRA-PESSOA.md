@@ -23,3 +23,5 @@ Piso contínuo: a mesma superfície passa por trás do adversário, pelas latera
 Ajustes do diagnóstico: ballHeight recebe o progresso amostrado; o rastro projeta a altura anterior e o ajuste de contato sem modificar a bola. Sombras variam com a altura e também aparecem na Chuva de Bolas. Auxiliares em primeira pessoa usam escala projetada calibrada para acompanhar o adversário e apoiam os pés no mesmo piso.
 
 Raquete do usuário: preparação curta ao armar o golpe, encontro no ponto visual da bola no instante do som, brilho breve e retorno suave. A devolução parte do mesmo ponto de contato. A chuva conserva seus controles atuais. Testes verificam encontro, continuidade e retorno à posição de espera.
+
+Torcida em arquibancada frontal: seis fileiras retas de trinta pessoas, paralelas à linha de fundo, substituem o arco lateral. As fileiras distantes ficam menores; portes, gestos e ritmos continuam variados. A torcida é desenhada atrás do adversário.
