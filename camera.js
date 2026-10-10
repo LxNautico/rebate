@@ -2,8 +2,8 @@ let cameraMode='classic';
 function firstPerson(){return cameraMode==='first'&&state!=='ready';}
 function viewTop(){return !firstPerson()&&isTopSide();}
 function applyCamera(){cameraMode=document.getElementById('competition').value==='single'&&document.getElementById('camera-view').value==='first'?'first':'classic';}
-function firstPersonProjection(x,depth,height=0){const distance=3.8-2.8*depth,scale=1/distance;return {x:400+(x-.5)*700*scale,y:250+510*depth/distance-height*scale,scale};}
-function firstPersonTap(clientX,clientY,rect){const x=(clientX-rect.left)/rect.width*800,y=(clientY-rect.top)/rect.height*900,offset=Math.max(0,y-250),depth=Math.max(0,Math.min(1,offset*3.8/(510+offset*2.8))),width=700/(3.8-2.8*depth);return Math.max(0,Math.min(8,(.5+(x-400)/width)*9-.5));}
+function firstPersonProjection(x,depth,height=0){const distance=1.5-.5*depth,scale=1/distance;return {x:400+(x-.5)*700*scale,y:250+510*depth/distance-height*scale,scale};}
+function firstPersonTap(clientX,clientY,rect){const x=(clientX-rect.left)/rect.width*800,y=(clientY-rect.top)/rect.height*900,offset=Math.max(0,y-250),depth=Math.max(0,Math.min(1,offset*1.5/(510+offset*.5))),width=700/(1.5-.5*depth);return Math.max(0,Math.min(8,(.5+(x-400)/width)*9-.5));}
 function drawFirstPersonRacket(){const lift=Math.sin(Math.PI*Math.min(1,playerAnimation/.38))*35;ctx.save();ctx.translate(Math.max(70,Math.min(730,project(laneX(player),1).x)),840-lift);ctx.rotate(-.3+Math.sin(playerAnimation*8)*.15);ctx.fillStyle='#be926b';ctx.fillRect(-9,12,18,85);ctx.beginPath();ctx.ellipse(0,-25,55,65,0,0,Math.PI*2);ctx.fillStyle='#c66749';ctx.fill();ctx.strokeStyle='#ffe0ab';ctx.lineWidth=5;ctx.stroke();ctx.restore();}
 document.getElementById('camera-view').addEventListener('change',()=>{if(state==='ready'||state==='gameover')applyCamera();});
 
@@ -15,7 +15,8 @@ function drawFirstPersonCrowd(){
  ctx.save();ctx.fillStyle='#081d2966';ctx.strokeStyle='#081d2966';ctx.lineCap='round';
  for(let i=0;i<17;i++){
   const bounce=reduced?0:Math.abs(Math.sin(clock*2.5+i*.75))*8;
-  const x=65+i*42,y=174+(i%3)*8-bounce,wave=Math.sin(clock*1.8+i*1.3)*(reduced?0:3);
+  const angle=Math.PI+i*Math.PI/16;
+  const x=400+370*Math.cos(angle),y=410+245*Math.sin(angle)+(i%2)*7-bounce,wave=Math.sin(clock*1.8+i*1.3)*(reduced?0:3);
   ctx.beginPath();ctx.arc(x,y,9,0,Math.PI*2);ctx.fill();
   ctx.beginPath();ctx.moveTo(x-11,y+13);ctx.quadraticCurveTo(x,y+5,x+11,y+13);ctx.lineTo(x+14,y+42);ctx.lineTo(x-14,y+42);ctx.closePath();ctx.fill();
   ctx.lineWidth=7;for(const side of [-1,1]){ctx.beginPath();ctx.moveTo(x+side*9,y+17);ctx.lineTo(x+side*19,y+5);ctx.lineTo(x+side*23,y-17-wave);ctx.stroke();ctx.beginPath();ctx.arc(x+side*23,y-20-wave,5,0,Math.PI*2);ctx.fill();}
@@ -23,12 +24,19 @@ function drawFirstPersonCrowd(){
  ctx.restore();
 }
 
-function drawOpponentContact(){
- if(!firstPerson()||state!=='playing'||serving||pointDelay>0||arenaRain||musicalDance||!ball)return;
- const approaching=ball.direction===-1&&ball.depth<.2,returning=ball.direction===1&&opponentAnimation>.22;
- if(!approaching&&!returning)return;
- const contact=project(ball.direction===-1?ballX():ball.from,0,41),body=project(laneX(opponent),0),reach=approaching?Math.max(0,1-ball.depth/.2):1;
- const hand={x:body.x+(opponentPose===1?-17:17),y:firstPersonOpponentFoot()-40};
- const racket={x:hand.x+(contact.x-hand.x)*reach,y:hand.y+(contact.y-hand.y)*reach};
- ctx.save();ctx.strokeStyle='#cba078';ctx.lineWidth=4;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(hand.x,hand.y);ctx.lineTo(racket.x,racket.y+7);ctx.stroke();ctx.beginPath();ctx.ellipse(racket.x,racket.y,8,10,-.25,0,Math.PI*2);ctx.fillStyle='#cc654b';ctx.fill();ctx.strokeStyle='#f4d3a0';ctx.lineWidth=2;ctx.stroke();if(returning){ctx.beginPath();ctx.arc(contact.x,contact.y,12+(1-opponentAnimation/.38)*9,0,Math.PI*2);ctx.strokeStyle='#ffe7aa88';ctx.lineWidth=1;ctx.stroke();}ctx.restore();
+// Use the racket already present in the sprite; never draw a detached second racket.
+function opponentContactPose(){
+ if(firstPerson()&&state==='playing'&&!serving&&pointDelay===0&&ball&&ball.direction<0&&ball.depth<.16)return ball.from<.5?1:2;
+ return opponentAnimation>0?opponentPose:0;
+}
+function opponentRacketPoint(){
+ const pose=opponentContactPose(),body=project(laneX(opponent),0);
+ return {x:body.x+(pose===1?-40:pose===2?40:0),y:firstPersonOpponentFoot()-(pose?72:55)};
+}
+function firstPersonBallPoint(p){
+ if(!firstPerson()||serving||pointDelay>0||arenaRain||musicalDance||ball.depth>.14)return p;
+ if(ball.direction<0&&Math.abs(laneX(opponent)-ball.from)>athleteTolerance('opponent'))return p;
+ if(ball.direction>0&&opponentAnimation<=0)return p;
+ const contact=opponentRacketPoint(),t=Math.max(0,1-ball.depth/.14),blend=t*t*(3-2*t);
+ return {...p,x:p.x+(contact.x-p.x)*blend,y:p.y+(contact.y-p.y)*blend};
 }
